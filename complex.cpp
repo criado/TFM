@@ -12,10 +12,10 @@ inline uint countBits(mask i) {
 
 // for (mask x=firstElement(f); x!=0; x=nextElement(f,x))
 inline mask firstElement(mask f) {return f&(-f);}
-inline mask nextElement(mask f, mask x) {return ((x|(~f))+x)&f;}
+inline void nextElement(mask f, mask& x) {x= ((x|(~f))+x)&f;}
 
 // mask x=0; do{ stuff } while(x=nextSubset(f,x), x!=0)
-inline mask  nextSubset(mask f, mask x) {return ((x|(~f))+1)&f;}
+inline void  nextSubset(mask f, mask& x) {x= ((x|(~f))+1)&f;}
 
 void printMask(mask f) {cout<<bitset<32>(f)<<endl;}
 mask readMask() {
@@ -23,6 +23,8 @@ mask readMask() {
   for(int i=0; i<str.size(); i++) res=2*res+((str[i]=='1')?1:0);
   return res;
 }
+
+inline bool in(mask& a, mask&b) {return !(a&(~b));}
 
 ////////////////////////////////////////////////////////////////////////////////
 // S1: Constructors and IO
@@ -39,7 +41,7 @@ void Prismatoid::cascadeFacets() {
 
   while(!q.empty()) {
     mask f=q.front(); q.pop();
-    for(mask x=firstElement(f); x!=0; x=nextElement(f,x)) {
+    for(mask x=firstElement(f); x!=0; nextElement(f,x)) {
       SC[f^x]|=f; q.push(f^x);
   } }
 
@@ -79,7 +81,7 @@ void Prismatoid::write(ostream& output) {
 
   output<<dim<<" "<<numFacets<<endl;
   for(auto& it: SC) if(countBits(it.first)==dim)
-    for(mask x=firstElement(it.first); x!=0; x=nextElement(it.first, x)) {
+    for(mask x=firstElement(it.first); x!=0; nextElement(it.first, x)) {
       for(int y=0; y<2*N; ++y) if(x==(1<<y)) output<<y<<" ";
       output<<endl;
 }   }
@@ -95,78 +97,73 @@ void Prismatoid::initOptions() {
 }
 
 // Finds a move or crashes tryin'.
-pair<mask,mask> Prismatoid::findMove() {
-  pair<mask,mask> res;
+flip Prismatoid::findFlip() {
+  flip fl;
   uniform_int_distribution<unsigned long long> dis(0, options.size()-1);
   auto origin = options.begin(); advance(origin, dis(generator));
 
   for(auto it= origin; it!= options.end(); ++it)
-    if(check(it->first, res)) return res;
+    if(checkFlip(it->first, fl)) return fl;
   for(auto it=options.begin(); it!=origin; ++it)
-    if(check(it->first, res)) return res;
+    if(checkFlip(it->first, fl)) return fl;
 
-  assert(false); return res;
+  assert(false); return fl;
 }
 
-// Make the flip (f,l). TODO
-// Note that for frontier flips, there are two valid representations
-void Prismatoid::move(pair<mask,mask> fl) {
-  queue<mask> q;
-  mask frontierFacet=0; // The facet that should not be added.
-  mask f=fl.first, l=fl.second, u=f|l;
+// Makes the flip (f,l,v).
+void Prismatoid::execFlip(flip fl) {
+  queue<mask> q; mask f=fl.f, l=fl.l, v=fl.v, u=f|l|v;
+  // Note that the star (within the support) for a new face is:
+  // -If it has exactly one 0 in f, the support without that zero
+  // -If it has more than one 0 in f, u
 
-  // Canonincally, f should intersect both layers.
-  if(countBits(base1&u)==1) {
-    if((f&base1)==0) f|=base1&u, l^=base1&u;
-    frontierFacet=u^(LAYER1&u);
-  }
-  if(countBits(LAYER2&u)==1) {
-    if((f&LAYER2)==0) f|=(LAYER2&u), l^=(LAYER2&u);
-    frontierFacet=u^(LAYER2&u);
-  }
+  mask x=0; do {
 
-  mask x=0;
-  do { //Iterate through every subset
+    // The forbidden facet
+    if(x==(f|l)) continue;
 
-    // f subset of x, this face will disappear
-    if(!((f&frontierFacet)&~x)) {
-      SC.erase(x);
-
+    // The supersets of f are disappearing faces.
+    if(in(f,x)) {
+      if(countBits(x)==dim) dists.erase(x);
       if(countBits(x)==dim-1) {
-      
+        if(in(x,base2)) adyBase2.erase(x);
+        if(--options[SC[x]]==0) options.erase(SC[x]);
       }
-      if(countBits(x)==dim) {
-      
-      }
+      SC.erase(x);
     }
 
-    // x superset of l, and not subset of the frontier facet.
-    // This face will appear.
-    else if(!(l&~x) && !(x&~frontierFacet)) {
+    // The supersets of l are appearing faces.
+    else if(in(l,x)) {
+      SC[x]= (countBits(f&~x)==1)? ((f&~x)|l|v): u;
+      if(countBits(x)==dim) q.push(x);
+      if(countBits(x)==dim-1) {
+        if(in(x,base2)) adyBase2.insert(x);
+        ++options[SC[x]];
+    } }
     
+    // Stuff that remain the same.
+    else { 
+      if(countBits(x)==dim-1) if(--options[SC[x]]==0) options.erase(SC[x]);
+      SC[x]&=~u; SC[x]|= (countBits(f&~x)==1)? ((f&~x)|l|v): u;
+      if(countBits(x)==dim-1) ++options[SC[x]];
     }
 
-    //this facet will remain the same.
-    else {
-    
-    }
+  } while(nextSubset(u,x), x!=u); // TODO behaviour as expected?
 
-  } while(x= nextSubset(u,x), x!=u);
+  base1=SC[0]&LAYER1; base2=SC[0]&LAYER2; updateDists(q);
 }
 
-// Makes a random move. Returns its (f,l).
-pair<mask,mask> Prismatoid::move() {
-  pair<mask,mask> fl=findMove(); move(fl); return fl;
-}
+// Makes a random move. Returns its (f,l,v).
+flip Prismatoid::execFlip() { flip fl=findFlip(); execFlip(fl); return fl;}
 
 // Allow a move if
 // - It is an option (assumed)
 // - There's room to add a new vertex.
 // - The corresponding l is not in the complex.
 // - It does not change the number of vertices (under changeBases)
-// Returns (by reference) the pair (f,l) of the flip.
-// Note that f must intersect both layers by definition.
-bool Prismatoid::check(mask u, pair<mask,mask>& fl) {
+// Returns the flip by reference.
+bool Prismatoid::checkFlip(mask u, flip& fl) {
+
   if(countBits(u)==dim) { // Add a vertex to the support when required.
     mask newv, LAYER;
 
@@ -177,19 +174,19 @@ bool Prismatoid::check(mask u, pair<mask,mask>& fl) {
     if((newv=firstElement(LAYER & ~u))==0) return false;
     u|=newv;
   }
-  fl.first=u;
-  for(mask x=firstElement(u); x!=0; x=nextElement(u,x))
-    if(SC.find(u^x)!=SC.end()) fl.first^=x;
-  fl.second=u^fl.first;
+  fl.f=u;
+  for(mask x=firstElement(u); x!=0; nextElement(u,x))
+    if(SC.find(u^x)!=SC.end()) fl.f^=x;
+  fl.l=u^fl.f;
+  if( countBits(u&base1)==1) fl.v=(u&base1), fl.f^=fl.v; 
+  if( countBits(u&base2)==1) fl.v=(u&base2), fl.f^=fl.v;
 
-  if(SC.find(fl.second)!=SC.end()) return false;
+  // l must not be in SC.
+  if(SC.find(fl.l)!=SC.end()) return false;
 
-  // Am I adding a vertex?
-  if(!changeBases) if(countBits(fl.second)==1) return false;
-
-  // Am I removing a vertex?
-  if(!changeBases) if(countBits(u & LAYER1)==1 || countBits(u & LAYER2)==1)
-    if(countBits(fl.first)==2) return false;
+  // Am I adding/removing a vertex?
+  if(!changeBases) if(countBits(fl.l)==1) return false;
+  if(!changeBases) if(countBits(fl.f)==1) return false;
 
   return true;
 }
@@ -205,10 +202,10 @@ void Prismatoid::initGraph() {
   for(auto &it:SC) {
     if(countBits(it.first)==dim-1) {
       if     ((LAYER1 & it.first)==0) adyBase2.insert(it.first);
-      else if((LAYER2 & it.first)==0)q.push(it.first);
+      else if((LAYER2 & it.first)==0) q.push(it.second);
   } }
 
-  dists=map<mask,ii>(); updateCosts(q);
+  dists=map<mask,ii>(); updateDists(q);
 }
 
 
@@ -218,7 +215,7 @@ inline void relaxPair(ii& me, ii& other) {
                                    me.second= other.second;
   else if(other.first+1==me.first) me.second+=other.second;
 }
-void Prismatoid::updateCosts(queue<mask>& q) {
+void Prismatoid::updateDists(queue<mask>& q) {
   while(!q.empty()) {
     mask f=q.front(), f2; q.pop();
 
@@ -226,18 +223,19 @@ void Prismatoid::updateCosts(queue<mask>& q) {
       if(dists[f]==ii(1,1)) continue;
       dists[f]=ii(1,1);
 
-      for(mask x= firstElement(f); x!=0; x=nextElement(f,x))
+      for(mask x= firstElement(f); x!=0; nextElement(f,x))
         if(countBits(f2=SC[f^x]^x)==dim) q.push(f2);
     }
     else {
+      // if(dists[f]==ii(0,0)) dists[f]=ii(201,0); // needed?
       ii aux=ii(200,0);
-      for(mask x= firstElement(f); x!=0; x=nextElement(f,x)) {
+      for(mask x= firstElement(f); x!=0; nextElement(f,x)) {
         if(countBits(f2=SC[f^x]^x)!=dim) continue;
         relaxPair(aux, dists[f2]);
       }
       if(aux!=dists[f]) {
         dists[f]=aux;
-        for(mask x=firstElement(f); x!=0; x=nextElement(f,x))
+        for(mask x=firstElement(f); x!=0; nextElement(f,x))
           if(countBits(f2=SC[f^x]^x)==dim) q.push(f2);
 } } } }
 

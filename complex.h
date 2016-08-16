@@ -28,6 +28,9 @@ typedef pair<int,int> ii;
 typedef vector<int> vi;
 typedef pair<mask,mask> mm;
 
+class flip { public:               // f: face to remove
+  mask f,l,v;                      // l: maximal face to add
+}                                  // v: apex of the cone (frontier flip)
 classs Prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Public stuff (that should be private)
@@ -39,7 +42,7 @@ classs Prismatoid { public:
 
   map<mask,mask> SC;               // Face and ustar of face
   map<mask, ii> dists;             // Pair <distance, width> of each facet
-  set<mask> adyBase2;              // The set of the facets adyacent to base2
+  set<mask> adyBase2;              // The set of the ridges adyacent to base2
 
   map<mask,int> options;           // Set of ustars of ridges. That's it.
                                    // Frontier flips have dim vertices.
@@ -55,9 +58,8 @@ classs Prismatoid { public:
   void write(ostream& output);     // Writes prismatoid to file
 
   // S2: Flippin' magic
-  pair<mask,mask> move();          // These two update everything.
-  void move(pair<mask,mask>);      // Input: f and l.
-                                   //  won't care about flipability.
+  flip execFlip();                 // These two update everything.
+  void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
   pair<int, ii> costs();           // Number of vertices, distance and width
@@ -73,18 +75,14 @@ classs Prismatoid { public:
   
   default_random_engine generator; // RNG. The one thing that must be private.
 
-  void cascadeFacets();            // If SC contains the facet list, this
-                                   // finishes the construction.
-                                   // Only call from a constructor.
+  void cascadeFacets();            // Completes the construction from the facets
 
   void initOptions();              // Inits the options list 
   void initGraph();                // Inits graph and dists
-  void updateCosts(queue<mask>& q);// Updates the facets in q, cascading
+  void updateDists(queue<mask>& q);// Updates the facets in q, cascading
 
-  pair<mask,mask> findMove();             // Finds a move or crashes tryin'
-  bool check(mask u, pair<mask,mask>& fl);// Checks the validity of u.
-}
-
-//XXX should I rename "move" to "flip"?
+  flip findFlip();                 // Finds a flip or crashes tryin'
+  bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,
+}                                  //  returns the flip fl (by reference)
 
 #endif
