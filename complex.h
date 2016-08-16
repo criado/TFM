@@ -17,7 +17,7 @@
 #include <bitset>
 #include <cassert>
 
-#define N 15
+#define N 4
 #define LAYER2 ((1<<N)-1)
 #define LAYER1 (((1<<N)-1)<<N)
 
@@ -30,15 +30,15 @@ typedef pair<mask,mask> mm;
 
 class flip { public:               // f: face to remove
   mask f,l,v;                      // l: maximal face to add
-}                                  // v: apex of the cone (frontier flip)
-classs Prismatoid { public:
+};                                 // v: apex of the cone (frontier flip)
+class Prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Public stuff (that should be private)
   //////////////////////////////////////////////////////////////////////////////
   
   mask base1, base2;               // The actual vertices in each base.
   int dim;                         // A facet has dim vertices
-  bool changeBases=false;          // Can we add/remove vertices?
+  bool changeBases=true;           // Can we add/remove vertices?
 
   map<mask,mask> SC;               // Face and ustar of face
   map<mask, ii> dists;             // Pair <distance, width> of each facet
@@ -68,7 +68,7 @@ classs Prismatoid { public:
   // S4: Dont panic
   bool everythingIsOK();           // Is everything OK?
 
-  private:
+  //private:
   //////////////////////////////////////////////////////////////////////////////
   // Private stuff
   //////////////////////////////////////////////////////////////////////////////
@@ -83,6 +83,9 @@ classs Prismatoid { public:
 
   flip findFlip();                 // Finds a flip or crashes tryin'
   bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,
-}                                  //  returns the flip fl (by reference)
+};                                 //  returns the flip fl (by reference)
+
+void printMask(mask f);
+mask readMask();
 
 #endif

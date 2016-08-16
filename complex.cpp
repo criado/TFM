@@ -1,7 +1,5 @@
 #include "complex.h"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +15,9 @@ inline void nextElement(mask f, mask& x) {x= ((x|(~f))+x)&f;}
 // mask x=0; do{ stuff } while(x=nextSubset(f,x), x!=0)
 inline void  nextSubset(mask f, mask& x) {x= ((x|(~f))+1)&f;}
 
-void printMask(mask f) {cout<<bitset<32>(f)<<endl;}
+void printMask(mask f) {
+  for(int i=0; i<2*N; i++) if(((1<<i)&f)!=0) cout<<i<<" "; cout<<endl;
+}
 mask readMask() {
   string str; getline(cin, str); mask res=0;
   for(int i=0; i<str.size(); i++) res=2*res+((str[i]=='1')?1:0);
@@ -33,11 +33,13 @@ inline bool in(mask& a, mask&b) {return !(a&(~b));}
 // Assumes that in SC we have only facets of dim dim. Builds everything else.
 // You should only call this in a constructor, or bad things could happen.
 void Prismatoid::cascadeFacets() {
-  queue<mask> q;
+  queue<mask> q; base1=base2=0;
+  cout<<"begin cascading"<<endl;
 
   for(auto& it: SC) q.push(it.first),
                     base1|= LAYER1 & it.first,
-                    base2|= LAYER2 & it.first;
+                    base2|= LAYER2 & it.first,
+                    printMask(it.first);
 
   while(!q.empty()) {
     mask f=q.front(); q.pop();
@@ -53,8 +55,9 @@ void Prismatoid::cascadeFacets() {
 
 // Crosspolytope constructor
 Prismatoid::Prismatoid(int _dim) {
-  dim=_dim; SC=map<uint,uint>();
-  for(uint i=1; i<(1<<dim)-1; i++) SC[i|((base2^i)<<N)]=i|((base2^i)<<N);
+  dim=_dim; SC=map<uint,uint>(); mask f;
+  base2=(1<<dim)-1; base1=base2<<N;
+  for(uint i=1; i<base2; i++) f=(i|((i<<N)^base1)), SC[f]=f;
 
   cascadeFacets();
 }
@@ -80,11 +83,14 @@ void Prismatoid::write(ostream& output) {
   int numFacets=0; for(auto& it: SC) if(countBits(it.first)==dim) ++numFacets;
 
   output<<dim<<" "<<numFacets<<endl;
-  for(auto& it: SC) if(countBits(it.first)==dim)
-    for(mask x=firstElement(it.first); x!=0; nextElement(it.first, x)) {
+  for(auto& it: SC) if(countBits(it.first)==dim) {
+    printMask(it.first);
+    for(mask x=firstElement(it.first); x!=0; nextElement(it.first, x))
       for(int y=0; y<2*N; ++y) if(x==(1<<y)) output<<y<<" ";
-      output<<endl;
-}   }
+    
+    output<<endl;
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // S2: Flippin' magic.
@@ -134,8 +140,10 @@ void Prismatoid::execFlip(flip fl) {
 
     // The supersets of l are appearing faces.
     else if(in(l,x)) {
-      SC[x]= (countBits(f&~x)==1)? ((f&~x)|l|v): u;
-      if(countBits(x)==dim) q.push(x);
+      SC[x]= (countBits(f&~x)==1)? ((f&x)|l|v): u;
+      if(countBits(x)==dim) {
+        q.push(x);
+      }
       if(countBits(x)==dim-1) {
         if(in(x,base2)) adyBase2.insert(x);
         ++options[SC[x]];
@@ -144,7 +152,7 @@ void Prismatoid::execFlip(flip fl) {
     // Stuff that remain the same.
     else { 
       if(countBits(x)==dim-1) if(--options[SC[x]]==0) options.erase(SC[x]);
-      SC[x]&=~u; SC[x]|= (countBits(f&~x)==1)? ((f&~x)|l|v): u;
+      SC[x]&=~u; SC[x]|= ((countBits(f&~x)==1)? ((f&x)|l|v): u);
       if(countBits(x)==dim-1) ++options[SC[x]];
     }
 
@@ -167,19 +175,20 @@ bool Prismatoid::checkFlip(mask u, flip& fl) {
   if(countBits(u)==dim) { // Add a vertex to the support when required.
     mask newv, LAYER;
 
-    if     (countBits(u&LAYER2)==1) LAYER=LAYER1;
-    else if(countBits(u&LAYER1)==1) LAYER=LAYER2;
+    if     (countBits(u&LAYER2)==1) newv= firstElement(LAYER1 &~base1);
+    else if(countBits(u&LAYER1)==1) newv= firstElement(LAYER2 &~base2);
     else {cerr<<"Error 841: Not enough cheese in buffer."<<endl; return false;}
     
-    if((newv=firstElement(LAYER & ~u))==0) return false;
-    u|=newv;
+    if(newv==0) return false; u|=newv;
   }
   fl.f=u;
   for(mask x=firstElement(u); x!=0; nextElement(u,x))
-    if(SC.find(u^x)!=SC.end()) fl.f^=x;
-  fl.l=u^fl.f;
-  if( countBits(u&base1)==1) fl.v=(u&base1), fl.f^=fl.v; 
-  if( countBits(u&base2)==1) fl.v=(u&base2), fl.f^=fl.v;
+    if(SC.find(u^x)!=SC.end()) fl.f&=u^x;
+  fl.l=u^fl.f; 
+
+  if      (countBits(u&base1)==1) fl.v=(u&base1), fl.f^=fl.v; 
+  else if (countBits(u&base2)==1) fl.v=(u&base2), fl.f^=fl.v;
+  else fl.v=0;
 
   // l must not be in SC.
   if(SC.find(fl.l)!=SC.end()) return false;
@@ -229,10 +238,10 @@ void Prismatoid::updateDists(queue<mask>& q) {
     else {
       // if(dists[f]==ii(0,0)) dists[f]=ii(201,0); // needed?
       ii aux=ii(200,0);
-      for(mask x= firstElement(f); x!=0; nextElement(f,x)) {
-        if(countBits(f2=SC[f^x]^x)!=dim) continue;
-        relaxPair(aux, dists[f2]);
-      }
+      for(mask x= firstElement(f); x!=0; nextElement(f,x))
+        if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
+          relaxPair(aux, dists[f2]);
+
       if(aux!=dists[f]) {
         dists[f]=aux;
         for(mask x=firstElement(f); x!=0; nextElement(f,x))
