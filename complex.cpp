@@ -1,4 +1,4 @@
-#include "complex.h"
+#include "complex.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
@@ -34,12 +34,10 @@ inline bool in(mask& a, mask&b) {return !(a&(~b));}
 // You should only call this in a constructor, or bad things could happen.
 void Prismatoid::cascadeFacets() {
   queue<mask> q; base1=base2=0;
-  cout<<"begin cascading"<<endl;
 
   for(auto& it: SC) q.push(it.first),
                     base1|= LAYER1 & it.first,
-                    base2|= LAYER2 & it.first,
-                    printMask(it.first);
+                    base2|= LAYER2 & it.first;
 
   while(!q.empty()) {
     mask f=q.front(); q.pop();
