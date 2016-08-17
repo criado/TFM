@@ -48,9 +48,6 @@ void prismatoid::cascadeFacets() {
   initOptions(); initGraph();
   //assert(everythingIsOK());
 
-  unsigned seed= chrono::system_clock::now().time_since_epoch().count();
-  //generator=default_random_engine(seed);
-  generator=default_random_engine(142857);
   cout<<"built"<<endl;
 }
 
@@ -101,10 +98,10 @@ void prismatoid::initOptions() {
 }
 
 // Finds a move or crashes tryin'.
-flip prismatoid::findFlip() {
+flip prismatoid::findFlip(rng& gen) {
   flip fl;
-  uniform_int_distribution<unsigned long long> dis(0, options.size()-1);
-  auto origin = options.begin(); advance(origin, dis(generator));
+  uniform_int_distribution<int> dis(0, options.size()-1);
+  auto origin = options.begin(); advance(origin, dis(gen));
 
   for(auto it= origin; it!= options.end(); ++it)
     if(checkFlip(it->first, fl)) return fl;
@@ -173,7 +170,9 @@ void prismatoid::execFlip(flip fl) {
 }
 
 // Makes a random move. Returns its (f,l,v).
-flip prismatoid::execFlip() { flip fl=findFlip(); execFlip(fl); return fl;}
+flip prismatoid::execFlip(rng& gen) { 
+  flip fl=findFlip(gen); execFlip(fl); return fl;
+}
 
 // Allow a flip with support u if:
 // - It is the ustar of a ridge (assumed by pertenence to options)

@@ -11,9 +11,10 @@ bool feasible(pair<int,il> costs) {
 
 int main() {
   unsigned seed=chrono::system_clock::now().time_since_epoch().count();
-  default_random_engine generator(908421);
+  rng generator(seed);
   uniform_real_distribution<double> dist(0.0,1.0);
   auto dice=bind(dist,generator);
+  double totaltime=0.0; int totalflips=0;
 
   ofstream index,sol; ifstream file;
 
@@ -26,18 +27,25 @@ int main() {
     pair<int,il> costs, oldcosts=p.costs();
 
     for(int k=0; k<10000; k++) {
+
+      auto start=chrono::steady_clock::now();
       while(true) {
-        fl=p.execFlip(); costs=p.costs();
+        fl=p.execFlip(generator); costs=p.costs();
 
         swap(fl.f, fl.l);
 
         if(!feasible(costs)) p.execFlip(fl);
         else break;
       }
+      auto end=chrono::steady_clock::now();
+      totaltime+=chrono::duration<double,nano>(end-start).count();
+      totalflips++;
 
-      if(k%1000==0) cout<<prueba<<": "<<costs.first<<" ("
-                        <<costs.second.first<<","
-                        <<costs.second.second<<")"<<endl;
+      if(((k+1)%1000)==0) 
+        cout<<prueba<<": "<<costs.first<<" ("
+            <<costs.second.first<<","
+            <<costs.second.second<<") average flip time: "
+            <<totaltime/totalflips<<"s."<<endl;
 
       double deltax=costsToDouble(costs)-costsToDouble(oldcosts);
 

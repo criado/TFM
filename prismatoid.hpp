@@ -26,6 +26,7 @@ using namespace std;
 typedef unsigned int mask;
 typedef pair<int, long long unsigned> il;
 typedef vector<int> vi;
+typedef default_random_engine rng;
 
 class flip { public:               // f: face to remove
   mask f,l,v;                      // l: maximal face to add
@@ -57,7 +58,7 @@ class prismatoid { public:
   void write(ostream& output);     // Writes prismatoid to file
 
   // S2: Flippin' magic
-  flip execFlip();                 // These two update everything.
+  flip execFlip(rng& gen);         // These two update everything.
   void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
@@ -71,8 +72,6 @@ class prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Private stuff
   //////////////////////////////////////////////////////////////////////////////
-  
-  default_random_engine generator; // RNG. The one thing that must be private.
 
   void cascadeFacets();            // Completes the construction from the facets
 
@@ -80,7 +79,7 @@ class prismatoid { public:
   void initGraph();                // Inits graph and dists
   void updateDists(queue<mask>& q);// Updates the facets in q, cascading
 
-  flip findFlip();                 // Finds a flip or crashes tryin'
+  flip findFlip(rng& gen);         // Finds a flip or crashes tryin'
   bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,
 };                                 //  returns the flip fl (by reference)
 
