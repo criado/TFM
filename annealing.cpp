@@ -38,6 +38,7 @@ int main() {
         else break;
       }
       auto end=chrono::steady_clock::now();
+
       totaltime+=chrono::duration<double,nano>(end-start).count();
       totalflips++;
 
@@ -45,7 +46,7 @@ int main() {
         cout<<prueba<<": "<<costs.first<<" ("
             <<costs.second.first<<","
             <<costs.second.second<<") average flip time: "
-            <<totaltime/totalflips<<"s."<<endl;
+            <<totaltime/totalflips/1000.0<<"ns."<<endl;
 
       double deltax=costsToDouble(costs)-costsToDouble(oldcosts);
 
