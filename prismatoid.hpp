@@ -1,5 +1,5 @@
-#ifndef COMPLEX        
-#define COMPLEX        // Decaf ninja style. Bit ninjustu but with class.
+#ifndef PRISMATOID     
+#define PRISMATOID     // Decaf ninja style. Bit ninjustu but with class.
                        // My humble interpretation of what SimplicialComplex.hpp
 #include <map>         // should be.
 #include <vector>      //
@@ -17,21 +17,20 @@
 #include <bitset>
 #include <cassert>
 
-#define N 4
+#define N 14
 #define LAYER2 ((1<<N)-1)
 #define LAYER1 (((1<<N)-1)<<N)
 
 using namespace std;
 
 typedef unsigned int mask;
-typedef pair<int,int> ii;
+typedef pair<int, long long unsigned> il;
 typedef vector<int> vi;
-typedef pair<mask,mask> mm;
 
 class flip { public:               // f: face to remove
   mask f,l,v;                      // l: maximal face to add
 };                                 // v: apex of the cone (frontier flip)
-class Prismatoid { public:
+class prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Public stuff (that should be private)
   //////////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,7 @@ class Prismatoid { public:
   bool changeBases=true;           // Can we add/remove vertices?
 
   map<mask,mask> SC;               // Face and ustar of face
-  map<mask, ii> dists;             // Pair <distance, width> of each facet
+  map<mask, il> dists;             // Pair <distance, width> of each facet
   set<mask> adyBase2;              // The set of the ridges adyacent to base2
 
   map<mask,int> options;           // Set of ustars of ridges. That's it.
@@ -53,8 +52,8 @@ class Prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   
   // S1: Constructors and IO
-  Prismatoid(int _dim);            // Crosspolytope
-  Prismatoid(istream& input);      // Reads prismatoid from file
+  prismatoid(int _dim);            // Crosspolytope
+  prismatoid(istream& input);      // Reads prismatoid from file
   void write(ostream& output);     // Writes prismatoid to file
 
   // S2: Flippin' magic
@@ -62,7 +61,7 @@ class Prismatoid { public:
   void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
-  pair<int, ii> costs();           // Number of vertices, distance and width
+  pair<int, il> costs();           // Number of vertices, distance and width
   pair<vi,vi> statsForSantos();    // f-vector and layers
 
   // S4: Dont panic

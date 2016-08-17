@@ -1,13 +1,22 @@
-#include "complex.hpp"
+#include "prismatoid.hpp"
 
 using namespace std;
 
-
 int main() {
-  Prismatoid p(3);
+  prismatoid p(cin);
   cout<<"built"<<endl;
+  pair<int,il> c=p.costs();
+  cout<<p.dim<<endl;
 
+  cout<<c.first<<" "<<c.second.first<<" "<<c.second.second<<endl;
+  cout<<"printing dists"<<endl;
+  for(auto &it: p.dists) {
+    printMask(it.first);
+    cout<<"("<<it.second.first<<","<<it.second.second<<")"<<endl;
+    cout<<"----"<<endl;
+  }
 
+  return 0;
   while(true) {
     /*
     for(auto &it: p.SC) {
@@ -17,7 +26,7 @@ int main() {
     cout<<"printing dists"<<endl;
     for(auto &it: p.dists) {
       printMask(it.first);
-      cout<<it.second.first<<" "<<it.second.second<<endl;
+      cout<<"("<<it.second.first<<","<<it.second.second<<")"<<endl;
       cout<<"----"<<endl;
     }
     cout<<"printing options"<<endl;
@@ -43,3 +52,4 @@ int main() {
 
   return 0;
 }
+
