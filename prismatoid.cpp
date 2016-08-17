@@ -1,4 +1,5 @@
 #include "prismatoid.hpp"
+#define DEBUG
 
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
@@ -45,7 +46,7 @@ void prismatoid::cascadeFacets() {
   } }
 
   initOptions(); initGraph();
-  assert(everythingIsOK());
+  //assert(everythingIsOK());
 
   unsigned seed= chrono::system_clock::now().time_since_epoch().count();
   //generator=default_random_engine(seed);
@@ -121,6 +122,9 @@ void prismatoid::execFlip(flip fl) {
   // -If it has exactly one 0 in f, the support without that zero
   // -If it has more than one 0 in f, u
 
+#ifdef DEBUG
+  assert(everythingIsOK());
+#endif
   mask x=0; do {
 
     // The forbidden facet
@@ -152,24 +156,11 @@ void prismatoid::execFlip(flip fl) {
       if(countBits(x)==dim-1) ++options[SC[x]];
     }
 
-    /*
-    if(countBits(x)==dim-1 && countBits(SC[x])==dim && !(in(x,base1)||in(x,base2))) {
-      cout<<"Tracing down the lack of cheese"<<endl;
-      printMask(x);
-      printMask(old);
-      printMask(older);
-      if(SC.find(x)==SC.end()) cout<<"SC[x] not found"<<endl;
-      printMask(SC[x]);
-      printMask(f);
-      printMask(l);
-      printMask(v);
-      printMask(u);
-    }*/
-
   } while(nextSubset(u,x), x!=u);
 
   base1=SC[0]&LAYER1; base2=SC[0]&LAYER2; updateDists(q);
 
+#ifdef DEBUG
   if(!everythingIsOK()) {
     cout<<"Panic Attack at flip "<<numflips<<endl;
     printMask(f);
@@ -177,6 +168,7 @@ void prismatoid::execFlip(flip fl) {
     printMask(v);
     assert(false);
   }
+#endif
   numflips++;
 }
 
@@ -184,13 +176,15 @@ void prismatoid::execFlip(flip fl) {
 flip prismatoid::execFlip() { flip fl=findFlip(); execFlip(fl); return fl;}
 
 // Allow a flip with support u if:
-// - It is an option (assumed)
+// - It is the ustar of a ridge (assumed by pertenence to options)
 // - There's room to add a new vertex (when required).
 // - The ustar of f has exactly dim+1 vertices
+// - It does not add faces to the frontier (unless it is a frontier flip)
 // - The corresponding l is not in the complex.
 // - It does not change the set of vertices (under changeBases==false)
 // Returns the flip by reference.
 bool prismatoid::checkFlip(mask u, flip& fl) {
+  mask f,l,v;
 
   if(countBits(u)==dim) { // Add a vertex to the support when required.
     mask newv, LAYER;
@@ -201,25 +195,29 @@ bool prismatoid::checkFlip(mask u, flip& fl) {
     
     if(newv==0) return false; u|=newv;
   }
-  fl.f=u;
-  for(mask x=firstElement(u); x!=0; nextElement(u,x))
-    if(SC.find(u^x)!=SC.end()) fl.f&=u^x;
-  fl.l=u^fl.f; 
 
-  if      (countBits(u&base1)==1) fl.v=(u&base1), fl.f^=fl.v; 
-  else if (countBits(u&base2)==1) fl.v=(u&base2), fl.f^=fl.v;
-  else fl.v=0;
+  f=u;
+  for(mask x=firstElement(u); x!=0; nextElement(u,x))
+    if(SC.find(u^x)!=SC.end()) f&=u^x;
+  l=u^f; 
+
+  if      (countBits(u&base1)==1) v=(u&base1), f^=v; 
+  else if (countBits(u&base2)==1) v=(u&base2), f^=v;
+  else v=0;
 
   // ustar(f) must have dim+1 vertices;
-  if(countBits(SC[fl.f])!=dim+1) return false;
+  if(countBits(SC[f])!=dim+1) return false;
+
+  // Interior flips should not add new faces.
+  if(v==0 && (in(l,base1) || in(l,base2))) return false;
 
   // l must not be in SC.
-  if(SC.find(fl.l)!=SC.end()) return false;
+  if(SC.find(l)!=SC.end()) return false;
 
   // Am I adding/removing a vertex?
-  if(!changeBases && (countBits(fl.l)==1 || countBits(fl.f)==1)) return false;
+  if(!changeBases && (countBits(l)==1 || countBits(f)==1)) return false;
 
-  return true;
+  fl.f=f; fl.l=l; fl.v=v; return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -275,8 +273,25 @@ void prismatoid::updateDists(queue<mask>& q) {
 // Number of vertices, distance and width
 pair<int, il> prismatoid::costs() {
   il aux(200,0);
-  for(auto &it: adyBase2)
+
+#ifdef DEBUG
+  assert(everythingIsOK());
+#endif
+  for(auto &it: adyBase2) {
+#ifdef DEBUG
+    assert(SC.find(it)!=SC.end());
+    if(dists.find(SC[it])==dists.end()) {
+      cout<<numflips<<" likes in Facebook"<<endl;
+      printMask(it);
+      printMask(SC[it]);
+      assert(SC.find(SC[it])!=SC.end());
+    }
+#endif
+
     relaxPair(aux, dists[SC[it]]);
+  }
+
+  assert(aux.first!=1);
   return make_pair(countBits(base1|base2), aux);
 }
 
@@ -294,11 +309,11 @@ pair<vi, vi> prismatoid::statsForSantos() {
 ////////////////////////////////////////////////////////////////////////////////
 
 // Can I panic now?
-// FIXME misterious cost (1,0) and (5,2)
+// FIXME misterious cost (1,0)
 bool prismatoid::everythingIsOK() {
 
   // 1: is SC a simplicial complex?
-  /*
+  //*
   for(auto& it: SC)
     for(mask x=firstElement(it.first); x!=0; nextElement(it.first,x))
       if(SC.find(it.first&~x)==SC.end()||!in(it.second,SC[it.first&~x])) { 
@@ -314,7 +329,7 @@ bool prismatoid::everythingIsOK() {
   /**/
 
   // 1.5: Pure simplicial complex
-  //*
+  /*
   for(auto &it: SC) 
     if(it.first==it.second && countBits(it.first)!=dim) {
       cout<<"sssh, no tears. Only "<<numflips<<" dreams now"<<endl;
@@ -322,12 +337,15 @@ bool prismatoid::everythingIsOK() {
     }
   /**/
 
-  // 2: Every ridge must be internal or in a base.
+  // 2: Every ridge must be internal xor in a base.
   //*
   for(auto& it: SC)
     if(countBits(it.first)==dim-1)
-      if(it.second==it.first && !in(it.first,base1) && !in(it.first,base2)) {
-        cout<<"Non-especified excuse at "<<numflips<<"! *flips table*"<<endl;
+      if((countBits(it.second)==dim+1) ==
+         (in(it.first,base1) || in(it.first,base2))) {
+        cout<<"Non-specified excuse at "<<numflips<<"! *flips table*"<<endl;
+        printMask(it.first);
+        printMask(it.second);
         return false;
       }
   /**/
@@ -346,14 +364,41 @@ bool prismatoid::everythingIsOK() {
     return false;
   }
   if(adyBase2!=otherAdyBase2) {
-    cout<<numflips<<" people talking about piranhas right now"<<endl;
+    cout<<numflips<<" people thinking in piranhas right now"<<endl;
     return false;
   }
   /**/
 
   // 5: dists
   //*
-  
+  for(auto& it:SC)
+    if(countBits(it.first)==dim) {
+      mask f=it.first, f2; il aux(200,0);
+
+      if(dists.find(f)==dists.end()) {
+        cout<<numflips<<" weird errors yet to be invented"<<endl;
+        return false;
+      }
+
+      if(countBits(f&base1)==dim-1) {
+        if(dists[f]==il(1,1)) continue;
+        else {
+          cout<<numflips<<" bottles standing at the wall"<<endl;
+          return false;
+        }
+      }
+
+      for(mask x= firstElement(f); x!=0; nextElement(f,x))
+        if(SC.find(f^x)!=SC.end())
+          if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
+            relaxPair(aux, dists[f2]);
+
+      if(aux!=dists[f]) {
+        cout<<"Please reset the Universe "<<numflips<<" times."<<endl;
+        return false;
+      }
+    }
   /**/
   return true;
 }
+
