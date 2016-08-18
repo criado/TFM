@@ -1,6 +1,7 @@
 #include "prismatoid.hpp"
 #include <fstream>
 #include <functional>
+#include <iomanip>
 
 int main() {
   unsigned seed=chrono::system_clock::now().time_since_epoch().count();
@@ -32,10 +33,12 @@ int main() {
       if(((k+1)%1000)==0) {
         
         cout<<"Experiment "<<experiment
-            <<" ("<<100*double(k+1)/maxk<<"%): "
-            <<" temp= "<<t<<": "
+            <<" ("<<setw(4)<<100*double(k+1)/maxk<<"%): "
+            <<setw(5)<<" temp= "<<t<<": "
             << oldCost <<" "<<avgCost/numPrisms<<" "<<bestCost
             <<" flip time: "<<totaltime/totalflips/1000.0<<"us."<<endl;
+        cout<<"  vertices:" <<countBits(p.base1|p.base2)
+            <<" diameter:"<<p.distBase2.first<<endl;
         totaltime=0.0; totalflips=0;
         numPrisms=0.0; bestCost=1e30; avgCost=0.0;
       }

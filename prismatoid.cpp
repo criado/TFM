@@ -1,32 +1,6 @@
 #include "prismatoid.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
-// S0: Ancient bit-jutsu techniques
-////////////////////////////////////////////////////////////////////////////////
-inline uint countBits(mask i) {
-  i= i-((i>>1)&0x55555555); i= (i&0x33333333)+((i>>2)&0x33333333);
-  return (((i+(i>>4))&0x0F0F0F0F)*0x01010101) >> 24;
-}
-
-// for (mask x=firstElement(f); x!=0; x=nextElement(f,x))
-inline mask firstElement(mask f) {return f&-f;}
-inline void nextElement(mask f, mask& x) {x= ((x|~f)+x)&f;}
-
-// mask x=0; do{ stuff } while(x=nextSubset(f,x), x!=0)
-inline void  nextSubset(mask f, mask& x) {x= ((x|~f)+1)&f;}
-
-void printMask(mask f) {
-  for(int i=0; i<2*N; i++) if(((1<<i)&f)!=0) cout<<i<<" "; cout<<endl;
-}
-mask readMask() {
-  string str; getline(cin, str); mask res=0;
-  for(int i=0; i<str.size(); i++) res=2*res+((str[i]=='1')?1:0);
-  return res;
-}
-
-inline bool in(mask a, mask b) {return !(a&(~b));}
-
-////////////////////////////////////////////////////////////////////////////////
 // S1: Constructors and IO
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -283,11 +257,19 @@ double prismatoid::cost() {
   #endif
   #ifdef PLAN_B
   mask vertices=base1|base2;
-  double avg=1.0;
+  double avg=0.0;
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
-    avg*=countBits(SC[x]);
+    avg+=log(countBits(SC[x]));
 
   return avg;
+  #endif
+  #ifdef PLAN_C
+  mask vertices=base1|base2;
+  double minustar=1e10;
+  
+  for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
+    minustar=min(minustar, (double)countBits(SC[x]));
+  return (28-countBits(vertices))*(-dim-1)+minustar;
   #endif
 }
 bool prismatoid::feasible() {
@@ -332,7 +314,7 @@ bool prismatoid::everythingIsOK() {
   /**/
 
   // 1.5: Pure simplicial complex
-  /*
+  //*
   for(auto &it: SC) 
     if(it.first==it.second && countBits(it.first)!=dim) {
       cout<<"sssh, no tears. Only "<<numflips<<" dreams now"<<endl;

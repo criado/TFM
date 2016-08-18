@@ -16,6 +16,7 @@
 #include <string>
 #include <bitset>
 #include <cassert>
+#include <cmath>
 
 #define N 14
 #define LAYER2 ((1<<N)-1)
@@ -24,11 +25,13 @@
 //PLAN_A is minimizing the facets
 //PLAN_B is minimizing the geometric mean of card(ustar(v))
 //       (Actually it just uses the product)
+//PLAN_C is minimizing the ustar of the smallest vertex
 //SANTOS means starting with Santos' prismatoid.
 
-#define DEBUG
-#define PLAN_A
+//#define DEBUG
+//#define PLAN_A
 //#define PLAN_B
+#define PLAN_C
 #define SANTOS
 
 using namespace std;
@@ -96,7 +99,30 @@ class prismatoid { public:
   bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,
 };                                 //  returns the flip fl (by reference)
 
-void printMask(mask f);
-mask readMask();
+////////////////////////////////////////////////////////////////////////////////
+// S0: Ancient bit-jutsu techniques
+////////////////////////////////////////////////////////////////////////////////
+inline uint countBits(mask i) {
+  i= i-((i>>1)&0x55555555); i= (i&0x33333333)+((i>>2)&0x33333333);
+  return (((i+(i>>4))&0x0F0F0F0F)*0x01010101) >> 24;
+}
+
+// for (mask x=firstElement(f); x!=0; x=nextElement(f,x))
+inline mask firstElement(mask f) {return f&-f;}
+inline void nextElement(mask f, mask& x) {x= ((x|~f)+x)&f;}
+
+// mask x=0; do{ stuff } while(x=nextSubset(f,x), x!=0)
+inline void  nextSubset(mask f, mask& x) {x= ((x|~f)+1)&f;}
+
+inline void printMask(mask f) {
+  for(int i=0; i<2*N; i++) if(((1<<i)&f)!=0) cout<<i<<" "; cout<<endl;
+}
+inline mask readMask() {
+  string str; getline(cin, str); mask res=0;
+  for(int i=0; i<str.size(); i++) res=2*res+((str[i]=='1')?1:0);
+  return res;
+}
+
+inline bool in(mask a, mask b) {return !(a&(~b));}
 
 #endif
