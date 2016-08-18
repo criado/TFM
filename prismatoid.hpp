@@ -62,13 +62,14 @@ class prismatoid { public:
   void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
-  pair<int, il> costs();           // Number of vertices, distance and width
+  double cost();                  // Cost of this prismatoid (various options).
+  bool feasible();                 // Do we want this prismatoid?
   pair<vi,vi> statsForSantos();    // f-vector and layers
 
   // S4: Dont panic
   bool everythingIsOK();           // Is everything OK?
 
-  //private:
+  private:
   //////////////////////////////////////////////////////////////////////////////
   // Private stuff
   //////////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,7 @@ class prismatoid { public:
 
   void initOptions();              // Inits the options list 
   void initGraph();                // Inits graph and dists
-  void updateDists(queue<mask>& q);// Updates the facets in q, cascading
+  void updateDists(queue<mask>& q);// Updates dists by cascading
 
   flip findFlip(rng& gen);         // Finds a flip or crashes tryin'
   bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,

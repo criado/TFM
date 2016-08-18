@@ -1,5 +1,5 @@
 #include "prismatoid.hpp"
-#define DEBUG
+//#define DEBUG
 
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
@@ -46,7 +46,9 @@ void prismatoid::cascadeFacets() {
   } }
 
   initOptions(); initGraph();
-  //assert(everythingIsOK());
+  #ifdef DEBUG
+    assert(everythingIsOK());
+  #endif
 
   cout<<"built"<<endl;
 }
@@ -119,9 +121,9 @@ void prismatoid::execFlip(flip fl) {
   // -If it has exactly one 0 in f, the support without that zero
   // -If it has more than one 0 in f, u
 
-#ifdef DEBUG
-  assert(everythingIsOK());
-#endif
+  #ifdef DEBUG
+    assert(everythingIsOK());
+  #endif
   mask x=0; do {
 
     // The forbidden facet
@@ -157,15 +159,15 @@ void prismatoid::execFlip(flip fl) {
 
   base1=SC[0]&LAYER1; base2=SC[0]&LAYER2; updateDists(q);
 
-#ifdef DEBUG
-  if(!everythingIsOK()) {
-    cout<<"Panic Attack at flip "<<numflips<<endl;
-    printMask(f);
-    printMask(l);
-    printMask(v);
-    assert(false);
-  }
-#endif
+  #ifdef DEBUG
+    if(!everythingIsOK()) {
+      cout<<"Panic Attack at flip "<<numflips<<endl;
+      printMask(f);
+      printMask(l);
+      printMask(v);
+      assert(false);
+    }
+  #endif
   numflips++;
 }
 
@@ -270,28 +272,33 @@ void prismatoid::updateDists(queue<mask>& q) {
 } } } }
 
 // Number of vertices, distance and width
-pair<int, il> prismatoid::costs() {
+double prismatoid::cost() {
   il aux(200,0);
 
-#ifdef DEBUG
-  assert(everythingIsOK());
-#endif
+  #ifdef DEBUG
+    assert(everythingIsOK());
+  #endif
   for(auto &it: adyBase2) {
-#ifdef DEBUG
-    assert(SC.find(it)!=SC.end());
-    if(dists.find(SC[it])==dists.end()) {
-      cout<<numflips<<" likes in Facebook"<<endl;
-      printMask(it);
-      printMask(SC[it]);
-      assert(SC.find(SC[it])!=SC.end());
-    }
-#endif
+  #ifdef DEBUG
+      assert(SC.find(it)!=SC.end());
+      if(dists.find(SC[it])==dists.end()) {
+        cout<<numflips<<" likes in Facebook"<<endl;
+        printMask(it);
+        printMask(SC[it]);
+        assert(SC.find(SC[it])!=SC.end());
+      }
+  #endif
 
     relaxPair(aux, dists[SC[it]]);
   }
 
   assert(aux.first!=1);
-  return make_pair(countBits(base1|base2), aux);
+  #ifdef PLAN_A
+    return make_pair(countBits(base1|base2), aux);
+  #endif
+  #ifdef PLAN_B
+
+  #endif
 }
 
 // f-vector and layers.
