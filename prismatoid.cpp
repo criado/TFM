@@ -1,5 +1,4 @@
 #include "prismatoid.hpp"
-//#define DEBUG
 
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
@@ -33,11 +32,12 @@ inline bool in(mask a, mask b) {return !(a&(~b));}
 
 // Assumes that in SC we have only facets of dim dim. Builds everything else.
 void prismatoid::cascadeFacets() {
-  queue<mask> q; base1=base2=0;
+  queue<mask> q; base1=base2=0; numFacets=0;
 
   for(auto& it: SC) q.push(it.first),
                     base1|= LAYER1 & it.first,
-                    base2|= LAYER2 & it.first;
+                    base2|= LAYER2 & it.first,
+                    numFacets++;
 
   while(!q.empty()) {
     mask f=q.front(); q.pop();
@@ -68,7 +68,7 @@ prismatoid::prismatoid(int _dim) {
 prismatoid::prismatoid(istream& input) {
   SC=map<mask,mask>();
 
-  int numFacets; input>>dim>>numFacets;
+  input>>dim>>numFacets;
   
   for(int i=0; i<numFacets; i++) { //readFacet?
     mask f=0, aux; for(int j=0; j<dim; j++) input>>aux, f|=(1<<aux);
@@ -79,8 +79,6 @@ prismatoid::prismatoid(istream& input) {
 
 // Write prismatoid to file in the same format.
 void prismatoid::write(ostream& output) {
-  int numFacets=0; for(auto& it: SC) if(countBits(it.first)==dim) ++numFacets;
-
   output<<dim<<" "<<numFacets<<endl;
   for(auto& it: SC) if(countBits(it.first)==dim) {
     for(int i=0; i<2*N; ++i) if((it.first&(1<<i))!=0) output<<i<<" ";
@@ -131,7 +129,7 @@ void prismatoid::execFlip(flip fl) {
 
     // The supersets of f are disappearing faces.
     if(in(f,x)) {
-      if(countBits(x)==dim) dists.erase(x);
+      if(countBits(x)==dim) dists.erase(x),--numFacets;
       if(countBits(x)==dim-1) {
         if(in(x,base2)) adyBase2.erase(x);
         if(--options[SC[x]]==0) options.erase(SC[x]);
@@ -142,7 +140,7 @@ void prismatoid::execFlip(flip fl) {
     // The supersets of l are appearing faces.
     else if(in(l,x)) {
       SC[x]= (countBits(f&~x)==1)? ((f&x)|l|v): u;
-      if(countBits(x)==dim) q.push(x);
+      if(countBits(x)==dim) q.push(x),++numFacets;
       if(countBits(x)==dim-1) {
         if(in(x,base2)) adyBase2.insert(x);
         ++options[SC[x]];
@@ -245,6 +243,8 @@ inline void relaxPair(il& me, il& other) {
   else if(other.first+1==me.first) me.second+=other.second;
 }
 void prismatoid::updateDists(queue<mask>& q) {
+  il aux(200,0);
+
   while(!q.empty()) {
     mask f=q.front(), f2; q.pop();
 
@@ -258,7 +258,7 @@ void prismatoid::updateDists(queue<mask>& q) {
     }
     else {
       // if(dists[f]==ii(0,0)) dists[f]=ii(201,0); // needed?
-      il aux=il(200,0);
+      aux=il(200,0);
       for(mask x= firstElement(f); x!=0; nextElement(f,x))
         if(SC.find(f^x)!=SC.end())
           if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
@@ -269,35 +269,32 @@ void prismatoid::updateDists(queue<mask>& q) {
         for(mask x=firstElement(f); x!=0; nextElement(f,x))
           if(SC.find(f^x)!=SC.end())
             if(countBits(f2=SC[f^x]^x)==dim) q.push(f2);
-} } } }
+  } } } 
+
+  for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
+  assert(aux.first!=1); distBase2=aux;
+}
 
 // Number of vertices, distance and width
 double prismatoid::cost() {
-  il aux(200,0);
-
-  #ifdef DEBUG
-    assert(everythingIsOK());
-  #endif
-  for(auto &it: adyBase2) {
-  #ifdef DEBUG
-      assert(SC.find(it)!=SC.end());
-      if(dists.find(SC[it])==dists.end()) {
-        cout<<numflips<<" likes in Facebook"<<endl;
-        printMask(it);
-        printMask(SC[it]);
-        assert(SC.find(SC[it])!=SC.end());
-      }
-  #endif
-
-    relaxPair(aux, dists[SC[it]]);
-  }
-
-  assert(aux.first!=1);
   #ifdef PLAN_A
-    return make_pair(countBits(base1|base2), aux);
+  return double(numFacets);
+
   #endif
   #ifdef PLAN_B
+  mask vertices=base1|base2;
+  double avg=1.0;
+  for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
+    avg*=countBits(SC[x]);
 
+  return avg;
+  #endif
+}
+bool prismatoid::feasible() {
+  #ifdef SANTOS
+    return distBase2.first>dim;
+  #else
+    return true;
   #endif
 }
 
@@ -372,6 +369,15 @@ bool prismatoid::everythingIsOK() {
   if(adyBase2!=otherAdyBase2) {
     cout<<numflips<<" people thinking in piranhas right now"<<endl;
     return false;
+  }
+  for(auto& it: adyBase2){
+    assert(SC.find(it)!=SC.end());
+    if(dists.find(SC[it])==dists.end()) {
+      cout<<numflips<<" likes in Facebook"<<endl;
+      printMask(it);
+      printMask(SC[it]);
+      assert(SC.find(SC[it])!=SC.end());
+    }
   }
   /**/
 

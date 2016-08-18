@@ -21,6 +21,16 @@
 #define LAYER2 ((1<<N)-1)
 #define LAYER1 (((1<<N)-1)<<N)
 
+//PLAN_A is minimizing the facets
+//PLAN_B is minimizing the geometric mean of card(ustar(v))
+//       (Actually it just uses the product)
+//SANTOS means starting with Santos' prismatoid.
+
+#define DEBUG
+#define PLAN_A
+//#define PLAN_B
+#define SANTOS
+
 using namespace std;
 
 typedef unsigned int mask;
@@ -38,10 +48,12 @@ class prismatoid { public:
   
   mask base1, base2;               // The actual vertices in each base.
   int dim;                         // A facet has dim vertices
+  int numFacets;                   // Number of facets.
   bool changeBases=true;           // Can we add/remove vertices?
 
   map<mask,mask> SC;               // Face and ustar of face
   map<mask, il> dists;             // Pair <distance, width> of each facet
+  il distBase2;                    // (distance,width) for base2
   set<mask> adyBase2;              // The set of the ridges adyacent to base2
 
   map<mask,int> options;           // Set of ustars of ridges. That's it.
@@ -62,7 +74,7 @@ class prismatoid { public:
   void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
-  double cost();                  // Cost of this prismatoid (various options).
+  double cost();                   // Cost of this prismatoid (various options).
   bool feasible();                 // Do we want this prismatoid?
   pair<vi,vi> statsForSantos();    // f-vector and layers
 
