@@ -72,8 +72,10 @@ void prismatoid::initOptions() {
 }
 
 // Finds a move or crashes tryin'.
+// XXX the cornerstone.
 flip prismatoid::findFlip(rng& gen) {
   flip fl;
+  
   uniform_int_distribution<int> dis(0, options.size()-1);
   auto origin = options.begin(); advance(origin, dis(gen));
 
@@ -151,10 +153,10 @@ flip prismatoid::execFlip(rng& gen) {
 // Allow a flip with support u if:
 // - It is the ustar of a ridge (assumed by pertenence to options)
 // - There's room to add a new vertex (when required).
-// - The ustar of f has exactly dim+1 vertices
 // - It does not add faces to the frontier (unless it is a frontier flip)
-// - The corresponding l is not in the complex.
 // - It does not change the set of vertices (under changeBases==false)
+// - The ustar of f has exactly dim+1 vertices
+// - The corresponding l is not in the complex.
 // Returns the flip by reference.
 bool prismatoid::checkFlip(mask u, flip& fl) {
   mask f,l,v;
@@ -178,17 +180,17 @@ bool prismatoid::checkFlip(mask u, flip& fl) {
   else if (countBits(u&base2)==1) v=(u&base2), f^=v;
   else v=0;
 
+  // Interior flips should not add new frontier faces.
+  if(v==0 && (in(l,base1) || in(l,base2))) return false;
+
+  // Am I adding/removing a vertex?
+  //if(!changeBases && (countBits(l)==1 || countBits(f)==1)) return false;
+
   // ustar(f) must have dim+1 vertices;
   if(countBits(SC[f])!=dim+1) return false;
 
-  // Interior flips should not add new faces.
-  if(v==0 && (in(l,base1) || in(l,base2))) return false;
-
   // l must not be in SC.
   if(SC.find(l)!=SC.end()) return false;
-
-  // Am I adding/removing a vertex?
-  if(!changeBases && (countBits(l)==1 || countBits(f)==1)) return false;
 
   fl.f=f; fl.l=l; fl.v=v; return true;
 }
@@ -260,8 +262,9 @@ double prismatoid::cost() {
   double avg=0.0;
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
     avg+=log(countBits(SC[x]));
+  avg/=numBits(vertices);
 
-  return avg;
+  return exp(avg);
   #endif
   #ifdef PLAN_C
   mask vertices=base1|base2;
@@ -294,7 +297,6 @@ pair<vi, vi> prismatoid::statsForSantos() {
 ////////////////////////////////////////////////////////////////////////////////
 
 // Can I panic now?
-// FIXME misterious cost (1,0)
 bool prismatoid::everythingIsOK() {
 
   // 1: is SC a simplicial complex?
