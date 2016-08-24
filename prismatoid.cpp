@@ -72,7 +72,6 @@ void prismatoid::initOptions() {
 }
 
 // Finds a move or crashes tryin'.
-// XXX the cornerstone.
 flip prismatoid::findFlip(rng& gen) {
   flip fl;
   
@@ -87,7 +86,9 @@ flip prismatoid::findFlip(rng& gen) {
   assert(false); return fl;
 }
 
-int numflips=0;
+#ifdef DEBUG
+  int numflips=0;
+#endif
 // Makes the flip (f,l,v).
 void prismatoid::execFlip(flip fl) {
   queue<mask> q; const mask f=fl.f, l=fl.l, v=fl.v, u=f|l|v;
@@ -141,8 +142,8 @@ void prismatoid::execFlip(flip fl) {
       printMask(v);
       assert(false);
     }
+    numflips++;
   #endif
-  numflips++;
 }
 
 // Makes a random move. Returns its (f,l,v).
@@ -219,7 +220,6 @@ inline void relaxPair(il& me, il& other) {
   else if(other.first+1==me.first) me.second+=other.second;
 }
 void prismatoid::updateDists(queue<mask>& q) {
-  il aux(200,0);
 
   while(!q.empty()) {
     mask f=q.front(), f2; q.pop();
@@ -234,7 +234,7 @@ void prismatoid::updateDists(queue<mask>& q) {
     }
     else {
       // if(dists[f]==ii(0,0)) dists[f]=ii(201,0); // needed?
-      aux=il(200,0);
+      il aux(200,0);
       for(mask x= firstElement(f); x!=0; nextElement(f,x))
         if(SC.find(f^x)!=SC.end())
           if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
@@ -247,6 +247,7 @@ void prismatoid::updateDists(queue<mask>& q) {
             if(countBits(f2=SC[f^x]^x)==dim) q.push(f2);
   } } } 
 
+  il aux(200,0);
   for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
   assert(aux.first!=1); distBase2=aux;
 }
@@ -255,28 +256,42 @@ void prismatoid::updateDists(queue<mask>& q) {
 double prismatoid::cost() {
   #ifdef PLAN_A
   return double(numFacets);
-
   #endif
   #ifdef PLAN_B
   mask vertices=base1|base2;
   double avg=0.0;
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
     avg+=log(countBits(SC[x]));
-  avg/=numBits(vertices);
+  avg/=double(countBits(vertices));
 
   return exp(avg);
   #endif
   #ifdef PLAN_C
   mask vertices=base1|base2;
-  double minustar=1e10;
+  vector<double> ustars;
   
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
-    minustar=min(minustar, (double)countBits(SC[x]));
-  return (28-countBits(vertices))*(-dim-1)+minustar;
+    ustars.push_back((double)countBits(SC[x]));
+  sort(ustars.begin(),ustars.end());
+  return ustars[0]+ustars[1]+ustars[2]+ustars[3];
+  #endif
+  #ifdef PLAN_D
+  return SC.size();
+  #endif
+  #ifdef PLAN_E
+  mask vertices=base1|base2;
+  double avg=0.0, k=-3.0;
+  for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
+    avg+=pow(countBits(SC[x])-dim,k)/double(countBits(vertices));
+
+  return countBits(vertices)*600 + (pow(avg,1/k)+dim);
+  #endif
+  #ifdef PLAN_Z
+  return (distBase2.first>dim)?-1e10:distBase2.second;
   #endif
 }
 bool prismatoid::feasible() {
-  #ifdef SANTOS
+  #ifndef PLAN_Z
     return distBase2.first>dim;
   #else
     return true;
@@ -297,10 +312,11 @@ pair<vi, vi> prismatoid::statsForSantos() {
 ////////////////////////////////////////////////////////////////////////////////
 
 // Can I panic now?
+#ifdef DEBUG
 bool prismatoid::everythingIsOK() {
 
   // 1: is SC a simplicial complex?
-  //*
+  /*
   for(auto& it: SC)
     for(mask x=firstElement(it.first); x!=0; nextElement(it.first,x))
       if(SC.find(it.first&~x)==SC.end()||!in(it.second,SC[it.first&~x])) { 
@@ -316,7 +332,7 @@ bool prismatoid::everythingIsOK() {
   /**/
 
   // 1.5: Pure simplicial complex
-  //*
+  /*
   for(auto &it: SC) 
     if(it.first==it.second && countBits(it.first)!=dim) {
       cout<<"sssh, no tears. Only "<<numflips<<" dreams now"<<endl;
@@ -325,7 +341,7 @@ bool prismatoid::everythingIsOK() {
   /**/
 
   // 2: Every ridge must be internal xor in a base.
-  //*
+  /*
   for(auto& it: SC)
     if(countBits(it.first)==dim-1)
       if((countBits(it.second)==dim+1) ==
@@ -394,7 +410,15 @@ bool prismatoid::everythingIsOK() {
         return false;
       }
     }
+  il aux(200,0);
+  for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
+  if (aux!=distBase2) {
+    cout<<numflips<<" heroes saving the day"<<endl;
+    return false;
+  }
+
   /**/
   return true;
 }
+#endif
 

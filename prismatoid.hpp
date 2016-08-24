@@ -26,13 +26,12 @@
 //PLAN_B is minimizing the geometric mean of card(ustar(v))
 //       (Actually it just uses the product)
 //PLAN_C is minimizing the ustar of the smallest vertex
-//SANTOS means starting with Santos' prismatoid.
+//PLAN_D minimizes the number of faces
+//PLAN_E is generalized mean (k=3)
+//PLAN_Z should be starting with crosspolytope
 
 //#define DEBUG
-//#define PLAN_A
-//#define PLAN_B
-#define PLAN_C
-#define SANTOS
+#define PLAN_Z
 
 using namespace std;
 
