@@ -31,7 +31,7 @@
 //PLAN_Z should be starting with crosspolytope
 
 //#define DEBUG
-#define PLAN_Z
+#define PLAN_E
 
 using namespace std;
 
