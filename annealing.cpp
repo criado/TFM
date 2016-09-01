@@ -6,8 +6,8 @@
 
 double schedule(int k) {
   // "a ojo"-selected annealing schedule
-  double t0=500.0;
-  return t0*pow(0.99993, k);
+  double t0=1000.0;
+  return t0*pow(0.99997, k);
   /*
   return 1e-10;
 
@@ -26,7 +26,7 @@ int main() {
   flip fl; double record=28;
 
   for(int experiment=1; experiment>=1; experiment++) {
-    int maxk=200000;
+    int maxk=500000;
     double cost, oldCost, avgCost=0.0, bestCost=1e30, numPrisms=0.0;
 
     #ifndef PLAN_Z

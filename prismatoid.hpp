@@ -30,8 +30,8 @@
 //PLAN_E is generalized mean (k=3)
 //PLAN_Z should be starting with crosspolytope
 
-#define DEBUG
-#define PLAN_Z
+//#define DEBUG
+#define PLAN_E
 
 using namespace std;
 
