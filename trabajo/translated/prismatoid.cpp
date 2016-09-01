@@ -187,8 +187,9 @@ bool prismatoid::checkFlip(mask u, flip\& fl) {
   // Am I adding/removing a vertex?
   //if(!changeBases \&\& (countBits(l)==1 || countBits(f)==1)) return false;
 
-  // ustar(f) must have dim+1 vertices;
-  if(countBits(SC[f])!=dim+1) return false;
+  // Correct size of the support
+  if(v==0 \&\& countBits(SC[f])!=dim+1) return false;
+  if(v!=0 \&\& countBits(SC[f])!=dim)   return false;
 
   // l must not be in SC.
   if(SC.find(l)!=SC.end()) return false;
