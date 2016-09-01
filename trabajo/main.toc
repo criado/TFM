@@ -1,0 +1,20 @@
+\setstretch {0.1}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {section}{\numberline {2}Preliminaries}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Definitions}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Previous best bounds on the diameter of simplicial complexes}{5}{subsection.2.2}
+\contentsline {section}{\numberline {3}The maximum diameter of pure simplicial complexes and pseudo-manifolds \cite {mypaper}}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}pure simplicial complexes}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Pseudo-manifolds}{8}{subsection.3.2}
+\contentsline {section}{\numberline {4} Computational search for non-Hirsch topological prismatoids}{9}{section.4}
+\contentsline {subsection}{\numberline {4.1}Bistellar flips}{10}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Simulated annealing}{12}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}The objective function}{13}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Data structures}{14}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}Implementation details}{15}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}Experimental results}{17}{subsection.4.6}
+\contentsline {section}{\numberline {5}Conclusions}{18}{section.5}
+\contentsline {section}{\numberline {A}Source code.}{20}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}annealing.cpp}{20}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}prismatoid.hpp}{22}{subsection.A.2}
+\contentsline {subsection}{\numberline {A.3}prismatoid.cpp}{24}{subsection.A.3}
