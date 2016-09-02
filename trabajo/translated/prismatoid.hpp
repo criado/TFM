@@ -31,14 +31,14 @@
 //PLAN\_Z should be starting with crosspolytope
 
 //define DEBUG
-#define PLAN\_E
+#define PLAN_E
 
 using namespace std;
 
 typedef unsigned int mask;
 typedef pair<int, long long unsigned> il;
 typedef vector<int> vi;
-typedef default\_random\_engine rng;
+typedef default_random_engine rng;
 
 class flip { public:               // f: face to remove
   mask f,l,v;                      // l: maximal face to add
@@ -67,12 +67,12 @@ class prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   
   // S1: Constructors and IO
-  prismatoid(int \_dim);            // Crosspolytope
-  prismatoid(istream\& input);      // Reads prismatoid from file
-  void write(ostream\& output);     // Writes prismatoid to file
+  prismatoid(int _dim);            // Crosspolytope
+  prismatoid(istream& input);      // Reads prismatoid from file
+  void write(ostream& output);     // Writes prismatoid to file
 
   // S2: Flippin' magic
-  flip execFlip(rng\& gen);         // These two update everything.
+  flip execFlip(rng& gen);         // These two update everything.
   void execFlip(flip fl);          // The first choses flip at random.
 
   // S3: Costs and graph stuff
@@ -92,29 +92,29 @@ class prismatoid { public:
 
   void initOptions();              // Inits the options list 
   void initGraph();                // Inits graph and dists
-  void updateDists(queue<mask>\& q);// Updates dists by cascading
+  void updateDists(queue<mask>& q);// Updates dists by cascading
 
-  flip findFlip(rng\& gen);         // Finds a flip or crashes tryin'
-  bool checkFlip(mask u, flip\& fl);// Checks the validity of u as option,
+  flip findFlip(rng& gen);         // Finds a flip or crashes tryin'
+  bool checkFlip(mask u, flip& fl);// Checks the validity of u as option,
 };                                 //  returns the flip fl (by reference)
 
 ////////////////////////////////////////////////////////////////////////////////
 // S0: Ancient bit-jutsu techniques
 ////////////////////////////////////////////////////////////////////////////////
 inline uint countBits(mask i) {
-  i= i-((i>>1)\&0x55555555); i= (i\&0x33333333)+((i>>2)\&0x33333333);
-  return (((i+(i>>4))\&0x0F0F0F0F)*0x01010101) >> 24;
+  i= i-((i>>1)&0x55555555); i= (i&0x33333333)+((i>>2)&0x33333333);
+  return (((i+(i>>4))&0x0F0F0F0F)*0x01010101) >> 24;
 }
 
 // for (mask x=firstElement(f); x!=0; x=nextElement(f,x))
-inline mask firstElement(mask f) {return f\&-f;}
-inline void nextElement(mask f, mask\& x) {x= ((x|~f)+x)\&f;}
+inline mask firstElement(mask f) {return f&-f;}
+inline void nextElement(mask f, mask& x) {x= ((x|~f)+x)&f;}
 
 // mask x=0; do{ stuff } while(x=nextSubset(f,x), x!=0)
-inline void  nextSubset(mask f, mask\& x) {x= ((x|~f)+1)\&f;}
+inline void  nextSubset(mask f, mask& x) {x= ((x|~f)+1)&f;}
 
 inline void printMask(mask f) {
-  for(int i=0; i<2*N; i++) if(((1<<i)\&f)!=0) cout<<i<<" "; cout<<endl;
+  for(int i=0; i<2*N; i++) if(((1<<i)&f)!=0) cout<<i<<" "; cout<<endl;
 }
 inline mask readMask() {
   string str; getline(cin, str); mask res=0;
@@ -122,6 +122,6 @@ inline mask readMask() {
   return res;
 }
 
-inline bool in(mask a, mask b) {return !(a\&(~b));}
+inline bool in(mask a, mask b) {return !(a&(~b));}
 
 #endif

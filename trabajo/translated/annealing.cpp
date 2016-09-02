@@ -17,9 +17,9 @@ double schedule(int k) {
 }
 
 int main() {
-  unsigned seed=chrono::system\_clock::now().time\_since\_epoch().count();
+  unsigned seed=chrono::system_clock::now().time_since_epoch().count();
   rng generator(seed);
-  uniform\_real\_distribution<double> dist(0.0,1.0);
+  uniform_real_distribution<double> dist(0.0,1.0);
   auto dice=bind(dist,generator);
   double totaltime=0.0; int totalflips=0;
 
@@ -29,7 +29,7 @@ int main() {
     int maxk=500000;
     double cost, oldCost, avgCost=0.0, bestCost=1e30, numPrisms=0.0;
 
-    #ifndef PLAN\_Z
+    #ifndef PLAN_Z
       ifstream file("./28prismatoid"); prismatoid p(file); file.close();
     #else
       //prismatoid p(9);
@@ -54,7 +54,7 @@ int main() {
         numPrisms=0.0; bestCost=1e30; avgCost=0.0;
       }
 
-      auto start=chrono::steady\_clock::now();
+      auto start=chrono::steady_clock::now();
       while(true) {
         fl=p.execFlip(generator);
         cost=p.cost();
@@ -67,14 +67,14 @@ int main() {
         }
         else break;
       }
-      auto end=chrono::steady\_clock::now();
+      auto end=chrono::steady_clock::now();
 
       totaltime+=chrono::duration<double,nano>(end-start).count();
       totalflips++;
 
       double delta=cost-oldCost;
 
-      if(delta>0.0 \&\& dice()>exp(-delta/t)) {
+      if(delta>0.0 && dice()>exp(-delta/t)) {
         p.execFlip(fl);
         assert(oldCost==p.cost());
       }
@@ -89,7 +89,7 @@ int main() {
          <<" Diameter: "<<p.distBase2.first<<endl;
     index.close();
 
-    ofstream sol("./outputs/sol"+to\_string(experiment));
+    ofstream sol("./outputs/sol"+to_string(experiment));
     p.write(sol);
     sol.close();
   }

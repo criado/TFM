@@ -196,22 +196,23 @@ This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 Intern
 \pagenumbering{arabic}
 
 \section{Introduction}
-The problem of finding the combinatorial diameter of simplicial complexes, particullary polytopal simplicial complexes, arises naturally from the analisys of the simplex method. In the simplex algorithm, we start from a vertex of a polytope and we move from one vertex to a neighbour until we reach the ``best vertex'' of an objective function. Therefore, a natural question to ask is how long can this path of vertices be in the worst case or, equivalently, what is the maximum possible diameter of a polytopal simplicial complex, as a function of its diameter and number of vertices.
+The problem of finding the combinatorial diameter of simplicial complexes, particularly polytopal simplicial complexes, arises naturally from the analysis of the simplex method. In the simplex algorithm, we start from a vertex of a polytope and we move from one vertex to a neighbour until we reach the ``best vertex'' of an objective function. Therefore, a natural question to ask is how long can this path of vertices be in the worst case or, equivalently, what is the maximum possible diameter of a polytopal simplicial complex, as a function of its diameter and number of vertices.
 
-For the case of polytopal simplicial complexes, it was conjectured by Hirsch (1957) that the diameter of a polytope with $n$ facets and dimension $d$ is at most $n-d$. This was disproven by Francisco Santos Leal (2010) \cite{counterexample}, who found a non-Hirsch polytope with $86$ facets and dimension $43$. His construction, and the slightlly better ones subsequently constructed in \cite{improvement} depend on certain lower dimensional polytopes called \emph{prismatoids}. In particular, finding prismatoids satisfying certain property with a small number of vertices (or more significantly, with small difference ``vertices minus dimension'') will yield smaller counterexamples to the Hirsch Conjecture. It is also important to note it could still be that the diameter of all polytopes is linear on $n-d$, even if no polynomial upper bound is known\cite{Kalai:polymath3}. It would be desirable to prove or disprove this fact, and find the linear constant if applicable. 
+For the case of polytopal simplicial complexes, it was conjectured by Hirsch (1957) that the diameter of a polytope with $n$ facets and dimension $d$ is at most $n-d$. This was disproven by Francisco Santos Leal (2010) \cite{counterexample}, who found a non-Hirsch polytope with $86$ facets and dimension $43$. His construction, and the smaller ones subsequently constructed in \cite{improvement}, depend on certain lower dimensional polytopes called \emph{prismatoids}. In particular, finding prismatoids satisfying certain property with a small number of vertices (or more significantly, with small difference ``vertices minus dimension'') will yield smaller counterexamples to the Hirsch Conjecture. It is also important to note it could still be that the diameter of all polytopes is linear on $n-d$, even if no polynomial upper bound is known~\cite{Kalai:polymath3}. It would be desirable to prove or disprove this fact, and find the linear constant if applicable. 
 
 Partially as a means to shed light on the Hirsch question, but also as a natural mathematical question in itself, it is interesting to study how big can the diameter of other classes of simplicíal complexes be, and learn from the examples that we may find in this greater generality. This approach was started by Adler and Dantzig in the early 70s and has been continued, for example, in \cite{ManiWalkup,nonPolytopal}. See~\cite{Santos:progress} for a recent survey of results. This is also the approach taken in this work, in which we present two contributions:
 
 \begin{itemize}
 \item First, we show how to construct pure simplicial complexes of a given dimension $d-1$ and number of vertices $n$ which have diameters equal (modulo a constant depending on $d$) to the trivial upper bound of $O(n^{d-1})$. We first do this for some particular complexes that we call corridors 
-(Theorem~\ref{thm:pure_complexes}) and then show how to go from any pure simplicial complex to a pseudo-manifold of the same dimension without significantly changing neither the diameter nor the number of vertices (Theorem~\ref{thm:pseudo_manifolds} and Corollary~\ref{coro:pseudo_manifolds}). These constructions improve the previously best ones which were of type $\Theta(n^{2d/3})$ for general complexes, and $\Theta(n^2)$ (no $d$ in the exponent) for pseudo-manifolds. Our constructions are algebraic and are based on a sequence produced by certain polynomials over a (large enough) finite field. They are inspired in the well-known constructions of emph{linear-feedback shift registers} of maximal length. See the details in Section \ref{sec:mypaper}.
+(Theorem~\ref{thm:pure_complexes}) and then show how to go from any pure simplicial complex to a pseudo-manifold of the same dimension without significantly changing neither the diameter nor the number of vertices (Theorem~\ref{thm:pseudo_manifolds} and Corollary~\ref{coro:pseudo_manifolds}). These constructions improve the previously best ones which were of type $\Theta(n^{2d/3})$ for general complexes, and $\Theta(n^2)$ (no $d$ in the exponent) for pseudo-manifolds. Our constructions are algebraic and are based on a sequence produced by certain polynomials over a (large enough) finite field. They are inspired in the well-known constructions of \emph{linear-feedback shift registers} of maximal length. See the details in Section \ref{sec:mypaper}.
 
-\item We then introduce the concept of \emph{topologiacl prismatoids}, which generalize the (geometric) prismatoids from~\cite{counterexample,improvement}, and implement a metaheuristic to search for topological prismatoids with the non-Hirsch property and smaller than the ones in~\cite{counterexample,improvement}. Our program has been able to find topological prismatoids of dimension $5$ with $16$ vertices and diameter $6$. If one of these spheres turns out to be polytopal, then we would have constructed non-Hirsch polytopes of dimension 11 and with 22 facets, while the current smallest ones have dimension 20 and 40 facets~\cite{improvement}. Our algorithm combines the ideas of  \emph{simulated annealing} (SA), a common metaheuristic technique widely used in optimization with the notion of \emph{bistellar flips}, elementary transformations that change a simplicial complex in a local manner preserving its topology. Geometric bistellar flips are widely used in computatinal geometry and polyhedral combinatorics (see for example~\cite{SantosFlips}). The topological version that we use is very similar to the one used in~\cite{Lutz} in the context of triangulated manifold simplification, the main difference being that there only manifolds without boundary are used and here we need a version for manifolds with boundary. See details in Section~\ref{sec:prismatoids}.
+\item We then introduce the concept of \emph{topologiacl prismatoids}, which generalize the (geometric) prismatoids from~\cite{counterexample,improvement}, and we implement a metaheuristic to search for topological prismatoids with the non-Hirsch property and smaller than the ones in~\cite{counterexample,improvement}. Our program has been able to find topological prismatoids of dimension $5$ with $16$ vertices and diameter $6$. If one of these spheres turns out to be polytopal, then we would have constructed non-Hirsch polytopes of dimension 11 and with 22 facets, while the current smallest ones have dimension 20 and 40 facets~\cite{improvement}. Our algorithm combines the ideas of  \emph{simulated annealing} (SA), a common metaheuristic technique widely used in optimization, with the notion of \emph{bistellar flips}, elementary transformations that change a simplicial complex in a local manner preserving its topology. Geometric bistellar flips are widely used in computatinal geometry and polyhedral combinatorics (see for example~\cite{SantosFlips}). The topological version that we use is very similar to the one used in~\cite{Lutz} in the context of triangulated manifold simplification, the main difference being that there only manifolds without boundary are used and here we need a version for manifolds with boundary. See the details in Section~\ref{sec:prismatoids}.
 \end{itemize}
 
-The existence on non-Hirsch spheres has been known for about 30 years now~\cite{ManiWalkup}, but the smallest ones previously known are slightly bigger than ours: dimension 11 and 24 vertices in~\cite{ManiWalkup} versus dimension 10 and 22 vertices in our constructions. Both the sphere in~\cite{ManiWalkup} and the one we construct are~\emph{shellable}, a purely combinatorial property meaning basically that the sphere can be constructed one simplex at a time in such a way that all the intermediate complexes are balls. Shellability is a necessary condition for polytopality, but it is not sufficient. In fact, the sphere of~\cite{ManiWalkup} was proved to be non-polytopal in~\cite{nonPolytopal}. For the sphere we construct polytopality is unknown.
+Even if our example turned out to be nonpolytopal, it implies the existence of a sphere of dimension 10 and with 22 vertices whose diameter is greater than 11. This is an example of a non-Hirsch sphere (a $d-1$-sphere with $n$ vertices and diameter greater than $n-d$).
+The existence on non-Hirsch spheres has been known for about 35 years now~\cite{ManiWalkup}, but the smallest ones previously known are slightly bigger than ours: dimension 11 and 24 vertices in~\cite{ManiWalkup}. Both the sphere in~\cite{ManiWalkup} and the one we construct are~\emph{shellable}, a purely combinatorial property meaning basically that the sphere can be constructed one simplex at a time in such a way that all the intermediate complexes are balls. Shellability is a necessary condition for polytopality, but it is not sufficient. In fact, the sphere of~\cite{ManiWalkup} was proved to be non-polytopal in~\cite{nonPolytopal}. For the sphere we construct polytopality is unknown.
 
-Let us mention that, although we speak of our sphere as a single example, in fact the program has given as output lots of them with the same number of vertices (but we have checked shellability only for one of them, since no polynomial time algorithm to check shellability is known).
+Let us mention that, although we speak of our sphere as a single example, in fact the program has given as output 5 prismatoids with the same parameters (dimension 5, 22 vertices, and width 6) and 100  5-dimensional prismatoids of width six and  number of vertices still smaller than the previously known non-Hirsch prismatoids with a number of vertices ranging from 17 and 22. (But we have checked shellability only for one of them, since no polynomial time algorithm to check shellability is known).
 
 As a final motivation for (the second part of) our work, we bring here a quote by Gil Kalai about the role of examples in mathematics~\cite{examples}:
 
@@ -244,8 +245,8 @@ It is not unusual that a single example or a very few shape an entire mathematic
   Given a $(d-1)$-dimensional simplicial complex $\mathcal{S}$ and a face $f\in\mathcal{S}$:
   \begin{itemize}
     \item The \emph{star} of $f$ is the set of faces of $\mathcal{S}$ that are supersets of $f$.
-    \item The \emph{ustar} of $f$ is the union of all faces in the star of $f$.
-    \item The \emph{link} of $f$ is the set of faces of $\mathcal{S\setminus f}$ such that, joined with $f$, belong to the complex. That is, the vertices of the link, joined with $f$, form the ustar of $f$.
+    \item The \emph{ustar} of $f$ is the union of all faces in the star of $f$. That is to say, it is the set of vertices that appear in some face containing $f$.
+    \item The \emph{link} of $f$ is the set of faces of $\mathcal{S}\setminus f$  that, joined with $f$, belong to the complex. That is, the vertices of the link, joined with $f$, form the ustar of $f$.
   \end{itemize}
   Note that the ustar of a face $f$ is the set of vertices $v$ such that $f\cup \{v\}$ is still in the complex. We will use this definition to ``move up'' in the Hasse diagram, and we can ``move down'' by removing vertices of the faces.
 \end{definition}
@@ -271,7 +272,7 @@ Observe that the dual simplicial complex of a polytope $P$ is the face complex o
 \end{definition}
 
 \begin{definition}
-  A \emph{prismatoid} is a polytope $Q$ with two parallel facets $Q^+$ and $Q^-$, that we call the \emph{bases}, containing all the vertices. We call a prismatoid \emph{simplicial} if all faces except perhaps $Q^+$ and $Q^-$ are simplices. Observe that the faces of a prismatoid of dimension $d$, excluding the two bases, form a simplicial complex of dimension $d-1$ and homeomorphic to the product of $\S^{d-2}$ with a segment. We call this complex the prismatoid complex of $Q$.
+  A \emph{prismatoid} is a polytope $Q$ with two parallel facets $Q^+$ and $Q^-$, that we call the \emph{bases}, containing all the vertices. We call a prismatoid \emph{simplicial} if all faces except perhaps $Q^+$ and $Q^-$ are simplices. Observe that the faces of a prismatoid of dimension $d$, excluding the two bases, form a simplicial complex of dimension $d-1$ and homeomorphic to the product of $\mathbb{S}^{d-2}$ with a segment. We call this complex the prismatoid complex of $Q$.
   
   The width of a prismatoid is the distance in the dual graph from one base to the other, or, to be more in agreement with our definitions above, it is two plus the minimum distance butween a facet adjacent to a base and a facet adjacent to the other base.
 \end{definition}
@@ -282,18 +283,18 @@ Observe that the dual simplicial complex of a polytope $P$ is the face complex o
   In particular, if $l>d$ then the polytope dual to $Q'$ violates the Hirsch Conjecture.
 \end{theorem}
 
-\begin{theorem}[Matschke-Weibel-Santos' improved counterexample \cite{improvement}]
+\begin{theorem}[Matschke-Santos-Weibel' improved counterexample \cite{improvement}]
 There is a prismatoid with $28$ vertices, dimension $5$ and width $6$. That is, there is a non-hirsch polytope with dimension $23$ and $46$ vertices.
 \end{theorem}
 
 \begin{remark}
-The best example in \cite{improvement} , has actually 25 and not 28 vertices. But in our computations in section~\ref{sec:prismatoids} we take the one with 28 vertices because it has much more symmetry and is thus easier to input. Part of our goal was in fact to see whether we could go from the 28 example to one smaller than 25, in order to compare our methods with the half-computational ones used in~\cite{improvement}.
+The best example in \cite{improvement} has actually 25 and not 28 vertices. But in our computations in section~\ref{sec:prismatoids} we take the one with 28 vertices as the initial state for the SA, because it has much more symmetry and is thus easier to input. Part of our goal was in fact to see whether we could go from the 28 example to one smaller than 25, in order to compare our methods with the half-computational ones used in~\cite{improvement}.
 \end{remark}
 
 One of our main results in this project is a simplification of the Matschke-Santos-Weibel example, but in a topological sense. We now define the main object we are working with:
 
 \begin{definition}
-  A \emph{($(d-1)$-dimensional) topological prismatoid} is a $(d-1)$-dimensional pure simplicial complex homeomorphic to $\mathbb{S}_{d-2}\times [0,1]$ (that is, it is homeomorphic to a cylinder), and such that every face with all vertices in the same boundary component is fully contained in the boundary. Put differently, the induced subcomplex on each boundary component coincides with the boundary component itself.
+  A \emph{($(d-1)$-dimensional) topological prismatoid} is a $(d-1)$-dimensional pure simplicial complex homeomorphic to $\mathbb{S}_{d-2}\times [0,1]$ (that is, it is homeomorphic to a cylinder), and such that every face with all its vertices in the same boundary component is fully contained in the boundary. Put differently, the induced subcomplex on each boundary component coincides with the boundary component itself.
 (Observe that these boundary components are, by definition, $(d-2)$-spheres).
 \end{definition}
 
@@ -324,12 +325,14 @@ For the case of pseudo-manifolds, the best known lower bound was quadratic. The 
   PSC & $O(n^{d-1})$ & $\Omega(n^{2d/3})$ \newline (Santos, 2013) \\\hline
   P. Manifolds & $O(n^{d-1})$& $\Omega(n^2)$ \newline (Todd, 1974)\\\hline
   Spheres & $2^{d-3}n $ \newline(Larman 1970) & $1.08(n-d)$ \newline(Walkup-Mani 1980) \\\hline
-  Simplicial Polytopes & $2^{d-3}n$ \newline(Larman 1970) & $1.05(n-d)$ \newline(Santos-Matschke-Weibel 2015) \\\hline
+  Simplicial Polytopes & $2^{d-3}n$ \newline(Larman 1970) & $1.05(n-d)$ \newline(Matschke-Santos-Weibel 2015) \\\hline
 \end{tabular}
 \end{center}
 
-\section{The maximum diameter of pure simplicial complexes and pseudo-manifolds \cite{mypaper}}
+\section{The maximum diameter of pure simplicial complexes and pseudo-manifolds}
 \label{sec:mypaper}
+This section is based in my preprint~\cite{mypaper}
+
 \subsection{pure simplicial complexes}
 Our bound for the pure simplicial complex case is as follows:
 
@@ -472,7 +475,7 @@ Our construction also works for a particularization of pseudo-manifolds, called 
 
 \section{ Computational search for non-Hirsch topological prismatoids}
 \label{sec:prismatoids}
-The purpose of this second part is to find a non-Hirsch topological prismatoid by starting with the Matschke-Santos-Weibel prismatoidwith 28 vertices and doing operations preserving its width while reducing its number of vertices.
+The purpose of this second part is to find a non-Hirsch topological prismatoid by starting with the Matschke-Santos-Weibel prismatoid with 28 vertices and doing operations preserving its width while reducing its number of vertices.
 
 We will use the metaheuristic method of simulated annealing modifying the initial example vie topological bistellar flips.
 
@@ -481,7 +484,7 @@ Bistellar flips are basic operation we perform in our complexes to transform the
 
 \begin{definition}[Bistellar flips in manifolds~\cite{Lutz,Pachner}]
 \label{Bistellar flips}
-  In a pure simplicial complex $\mathcal{C}$ homeomorphic to a manifold (without boundary), a \emph{bistellar flip} is a transformation of $\mathcal{C}$ defined by a pair  $(f,l)$ where $f\in\mathcal{C}$ and $l\notin\mathcal{C}$ is a minimal nonface of $\mathcal{C}$ (every subset of $l$ is a face but $l$ is not), and $\text{link}(f)=\partial(l)$ (where $\partial (l)$ here represents the topological boundary). The changes produced on the facets of $\mathcal{C}$ are:
+  In a pure simplicial complex $\mathcal{C}$ homeomorphic to a manifold (without boundary), a \emph{bistellar flip} is a transformation of $\mathcal{C}$ defined by a pair  $(f,l)$ where $f\in\mathcal{C}$ and $l\notin\mathcal{C}$ is a minimal nonface of $\mathcal{C}$ (every subset of $l$ is a face but $l$ is not), and $\text{link}(f)=\partial(l)$ ($\partial (l)$ here represents the topological boundary, which for a face $l$ coincides with the simplicial complex of proper faces of $l$). The changes produced on the facets of $\mathcal{C}$ are:
   \begin{itemize}
     \item Every face of $\mathcal{C}$ containing $f$ is removed.
     \item Every subset of  $f\cup l$ containing $l$ but not containing $f$ is inserted as a new face.
@@ -493,9 +496,9 @@ Observe that the definition implies $f+l=d+1$, since $f\cup l\setminus \{v\}$ is
 In a prismatoid, which is a manifold with boundary, we want to allow also boundary flips, so we are interested in flips of two types:
 
 \begin{description}
-  \item[Interior flips] These have exactly the definition above, except we need to require the new face $l$ to be introduced to contain vertices of both bases of the prismatoid. Without this condition the flip introduces a face in the interior with all vertices in the boundary, contradicting the requirement that the subcomplex induced by the vertices in each boundary component equals that boundary component.
+  \item[Interior flips] These have exactly the definition above, except we need to require the new face $l$ to be introduced to contain vertices of both bases of the prismatoid. Without this condition the flip introduces a face in the interior of our complex but with all vertices in the same boundary component, contradicting the requirement that the subcomplex induced by the vertices in each boundary component equals that boundary component.
 
-    \item[Boundary flips]  The boundary of a prismatoid (or of any manifold with boundary) is itself a flip without boundary. We want to allow for the flips in one of the  boundary components to be considered flips in the prismatoid, but this only makes sense if all facets to be removed by the flip contain one and the same vertex $v$ in the other boundary component. If this happens we can modify the prismatoid by performing a \emph{cone over a flip in the boundary}. Observe that in this case $|f|+|l|=d$ instead of $d+1$, both $f$ and $l$ are contained in the same base. The vertex $v$ in the other base is called the \emph{apex} of the flip.
+    \item[Boundary flips]  The boundary of a prismatoid (or of any manifold with boundary) is itself a manifold without boundary. We want to allow for the flips in one of the  boundary components to be considered flips in the prismatoid, but this only makes sense if all facets to be removed by the flip contain one and the same vertex $v$ in the other boundary component. If this happens we can modify the prismatoid by performing a cone over a flip in the boundary. Observe that in this case $|f|+|l|=d$ instead of $d+1$, both $f$ and $l$ are contained in the same base. The vertex $v$ in the other base is called the apex of the flip.
 \end{description}
 
 The following definition considers together these two types of flips:
@@ -504,7 +507,7 @@ The following definition considers together these two types of flips:
 A \emph{bistellar flip} in a topological prismatoid $\mathcal{C}$ is a triple $(f,l,v)$ such that $f$ is a face, $l$ is a minimal nonface, and either:
 \begin{itemize}
 \item $|f|+|l|=d+1$ and $v=\emptyset$, in which case $l$ is required to have vertices from both bases and $\text{link}(f)=\partial(l)$.
-\item $|f|+|l|=d$ and $v$ is a vertex, in which case $f$ and $l$ are required to be contained in the base opposite to $v$ and $\text{link}(f)=\partial(l)*v$. Here $*$ denotes the operation of \emph{join} of two simplicial complexes, which in the case where $v$ is a single vertex is just a cone over $\partial(l)$.
+\item $|f|+|l|=d$ and $v$ is a vertex, in which case $f$ and $l$ are required to be contained in the base opposite to $v$ and $\text{link}(f)=\partial(l)*v$. Here $*$ denotes the operation of \emph{join} of two simplicial complexes, but in the case where $v$ is a single vertex $\text{link}(f)=\partial(l)*v$ is just a cone over $\partial(l)$.
 \end{itemize}
 In both cases, performing a flip makes the following changes:
   \begin{itemize}
@@ -522,10 +525,10 @@ One remark that is important for the implementation is that from the support of 
 \begin{itemize}
 \item In a boundary flip the support has a single vertex ($v$) in one of the components, and $d$ in the other one, while in an interior flip it has at least two vertices in each: $l$ has a vertex from each component by definition, and $f$ has at least another from each base because the condition $\text{link}(f)=\partial(l)$, with $|f|+|l|=d+1$, implies that $f$ is an interior face.
 
-\item In both cases, the set $f\cup l$ equals the intersection of all facets of $\mathcal{C}$ contained in $f\cup l \cup v$. This allows us to recover $f$, and hence $l$, once we know $v$ by the provious point.
+\item In both cases, the set $f\cup v$ equals the intersection of all facets of $\mathcal{C}$ contained in $f\cup l \cup v$. This allows us to recover $f$, and hence $l$, once we know $v$ by the provious point.
 \end{itemize}
 
-Then, given a possible support, $u$ with $d+1$ vertices ($d$ vertices if we want to allow flips that introduce a new vertex, that is flips in which $l$ is a single vertex and $f$ a single boundary ridge)
+Then, given a possible support $u$ with $d+1$ vertices ($d$ vertices if we want to allow flips that introduce a new vertex, that is flips in which $l$ is a single vertex and $f$ a single boundary ridge)
 , we can check if it corresponds to a flip preserving the prismatoid definition:
 
 \begin{enumerate}
@@ -561,14 +564,14 @@ Note that uniform probability between the neighbours is very important, since SA
 
 \subsection{The objective function}
 
-We had two independent goals with this project:
+We initially had two independent goals with this project:
 
 \begin{itemize}
   \item Finding prismatoids of given dimension $d$ and diameter $d+1$.
   \item Finding prismatoids of dimension 5 starting with Matschke-Santos-Weibel's example, and reduce the number of vertices.
 \end{itemize}
 
-The first case is called ``Plan\_Z'' in the source files, and it uses the number of minimal paths from base to base as objective function, starting from a crosspolytope.
+The first case is called \lstinline{Plan_Z} in the source files, and it uses the number of minimal paths from base to base as objective function, starting from a crosspolytope.
 
 The second case is far more interesting. We add a restriction of preserving the witdh after each flip, but we need an objective function that helps us removing vertices. Note that to remove a vertex we require to have a flip of type $(1,d)$, that is, a vertex whith $\text{card}(f)=1$. 
 Then, the objective function to minimize is the number of vertices, plus a smaller function to push the algorithm in the right direction. Some heuristics we have implemented for the latter are:
@@ -603,25 +606,25 @@ A natural way of implementing this data structure would be to have the whole Has
 
 This approach has the potential disadvantage of storing every face. Some other data structures are discussed in \cite{data structure}.
 
-Since we need to check for pertenence to the complex (see \ref{Bistellar flips}), and our complexes are small, we will take this approach, with some tweaking to reduce its memory load while improving its performance.
+Since we need to check for membership to the complex (see \ref{Bistellar flips}), and our complexes are small, we will take this approach, with some tweaking to reduce its memory load while improving its performance.
 
 Taking a face as a set, iteration through maximal subsets is the same as iterating through the set, and remove a vertex each time. The hard part is to iterate through minimal supersets.
-
+%
 Here is where the idea of the \emph{ustar} is useful. If a face $f$ has ustar $u$, every superfacet of $f$ is of the form $f\cup\{v\}$ where $v\in u\setminus f$. Therefore, having the ustar of every face stored, it is very easy to iterate through supersets too.
-
+%
 Thus, we implement the simplicial complex as a dictionary of pairs (face,ustar), indexed by the face.
 
 A flip is implemented simply by removing the old faces and inserting the new inserted faces
 
-There is no need to store the dual graph, because it is implicit in the complex. The neighbours of a face can be computed from the ustar of the corresponding ridge, even if the ridge is a boundary ridge. However, we do store, for each facet, the distance to the first base, and the number of paths achieving that distance. The reason is that we dont want to iterate through all the facets when performing a flip, we just want to update the values that have changed.
+There is no need to store the dual graph, because it is implicit in the complex. The neighbours of a face can be computed from the ustar of the corresponding ridge, even if the ridge is a boundary ridge. However, we do store, for each facet, the distance to the first base, and the number of paths achieving that distance. The reason is that we don't want to iterate through all the facets when performing a flip, we just want to update the values that have changed.
 
 Therefore, when we perform the flip, the new facets are inserted into a queue, and the distances are updated by cascading through the prismatoid.
 
-Finally, it is very important to have an unbiased generation of random flips. We imitate to some extent the techinque used in polymake \cite{polymake}. In polymake, there is a set of pairs $(f,l)$, called ``options'' satisfying some conditions for flipability, in particular conditions 1 and 2 of \ref{Bistellar flips}. The flips are categorized by dimension of $f$.
+Finally, it is very important to have an unbiased generation of random flips. We imitate to some extent the techinque used in polymake \cite{polymake}. In polymake, there is a set of pairs $(f,l)$, called ``options'' satisfying some conditions for flipability, in particular conditions 1 and 2 of subsection 4.1~\ref{Bistellar flips}. The flips are categorized by dimension of $f$.
+%
+Since every flip has the ustar of a ridge as support, we planned to simplify this by using ridges instead of the pairs $(f,l)$. However, several ridges may have the same ustar (making them correspond to the same potential flip). This makes this idea biased and some flips more likely than others.
 
-Since every flip has the ustar of a ridge as support, we planned to simplify this by having a set of ridges. However, multiple ridges may have the same support, making this idea biased, and some flips more likely than others.
-
-Then, we store in \lstinline{options} the support instead. This is very convenient, as it makes also very easy to spot vertex-adding flips (which are represented by having a support of $d$ vertices). And it is also very easy to update, because in the ``fl-model'', after every flip, some potential flips may change their $f$ and $l$ while having the same support. So our approach is more stable, requires less changes to the data structure and it is a bit cleaner.
+To avoid this bias, we store in \lstinline{options} the support instead. This is very convenient, as it makes also very easy to spot vertex-adding flips (which are represented by having a support of $d$ vertices). And it is also very easy to update, because in the ``fl-model'', after every flip, some potential flips may change their $f$ and $l$ while having the same support. And, since there is a bijection between a particular set of ustar of ridges and the set of flips (we have defined this bijection with the construction of $(f,l,v)$), it is easy to choose a random flip we just need to choose a random ustar and filter non-valid ones. So our approach is more stable, requires less changes to the data structure and it is a bit cleaner.
 \subsection{Implementation details}
 
 Along the course of the project we have developed several versions of the simulated annealing algorithm.
@@ -648,7 +651,7 @@ I will focus on the last one, which can be found at my github \cite{github}. Bas
     \end{enumerate}
 \end{description}
 
-The class \lstinline{prismatoid} has some interesting atributes:
+The class \lstinline{prismatoid} has some interesting attributes:
 
 \begin{itemize}
   \item \lstinline{map<mask,mask> SC} represent the set of faces of the simplicial complex as a c++ map. It first argument is the bitmask representing the face, and the second one is the union of all the faces in its star. Using this information, we can iterate through its subsets and supersets, easily traversing the complex in logarithmic time.
@@ -660,7 +663,8 @@ The class \lstinline{prismatoid} has some interesting atributes:
 The most relevant source files can be found also as an appendix. There are some smaller scripts for polymake, verification and file manipulation, written in perl, c++ and python that are not included here.
 
 \subsection{Experimental results}
-Using our approach, we have found 104 non hirsch topological prismatoids. All of them improved the best (geometrical) improvement over the original prismatoid \cite{improvement}, which had 25 vertices. 5 of them have 16 vertices. Here is one of those, conveniently arranged in layers:
+Using our approach, we have found 104 non-Hirsch topological prismatoids improving
+the best (geometrical) non-Hirsch prismatoid previously known~\cite{improvement}, which had 25 vertices. 5 of them have 16 vertices, (the minimum we have been able to get). Here is one of those. Vertices $0,1,2,3,4,5,6,7$ are in one base and vertices $a,b,c,d,e,f,g,h$ in the other one. The list of facets is arranged by ``layers'', meaning by this the number of vertices in one and the other base:
 
 \begin{tabular} {c|cc|cc|c}
 (1,2,3,4,g) & (6,1,3,g,h) & (0,7,1,g,f) & (0,7,g,h,a) & (2,3,h,a,f) & (2,a,b,c,f) \\
@@ -688,62 +692,76 @@ Using our approach, we have found 104 non hirsch topological prismatoids. All of
             & (0,3,4,c,e) &             &             &             &             
 \end{tabular}
 
-It is interesting to prove the shellability of the complex (since it is a necesary condition for polytopability). A simplicial complex is \emph{shellable} if there is an ordering of each facet such that the intersection of each facet with the union of the previous ones is a union of ridges.
+Checking whether a prismatoid is polytopal or not seems out of reach computationally, at least within the scope of this master's thesis. But we have done two partial checks:
+\begin{itemize}
+\item We have checked that the two subcomplexes in the bases of the prismatoid are indeed $3$-dimensional polytopal spheres, as they should if the whole thing is polytopal.
+\item We have checked that the complex obtained by filling-in a triangulation of each of the bases is a shellable $4$-sphere.
+\end{itemize}
+ 
 
-For this particular prismatoid, we have proven its shellability exhaustively. We have used the property that it is possible to decompose it into two spheres, then find a shelling of each sphere. 
+Shellability of a complex is a necessary condition for polytopality, and has interesting topological implications.
+
+\begin{definition}
+A pure simplicial complex of dimension $d-1$ is \emph{shellable} if there is an ordering of the facets such that the intersection of each facet with the complex consisting of the previous ones is pure $(d-2)$-dimensional (that is, a union of ridges).
+\end{definition}
+
+Checking shellability is belived to be NP-complete, and general purpose methods (including the one implemented in polymake) failed to do it for this example. But a semiautomatized  method based on first ordering the facets by layers and distance to the initial base, and then iteratively swapping facets that violated the shelling definition with later ones, succeeded. We believe this to be because our initial ordering was sufficiently close to a shelling. It is however interesting to note that no shelling order is compatible with the layers, because the union of the first three layers is not a ball, while every initial segment in a shelling of a sphere is a ball.
 
 \section{Conclusions}
 We have obtained simplified prismatoids preserving a property (non d-step), using a common technique. 5 of them achieve the minimum, 16 vertices. We are interested in finding if these topological prismatoids correspond to a polytope. If one of these prismatoids is polytopal, according to Theorem 1, there is a non-Hirsch polytope in dimension $11$ with $22$ vertices.
 
-Thus, an interesting idea for the future is to check if our prismatoids are polytopal. There is some research on the topic, and a necesary condition for polytopability is shellability. It is possible (but not trivial) to check the shellability of our prismatoids using their structure as a guide (because our prismatoids are spheres topologically, and we can partition them into two balls, speeding up the computation).
+Thus, an interesting idea for the future is to check if our prismatoids are polytopal. There is some research on the topic, and a necessary condition for polytopability is shellability. It is possible (but not trivial) to check the shellability of our prismatoids using their ``layer'' structure as a guide.
 
-Another possibility is to repeat our procedure with \emph{geometric flips}. That is, instead of only using topological information, we could keep track of the coordinates of each vertex and allow only flips that are realizable geometrically. Originally we did not consider this because of its computational complexity. But since topological flips are achieved in 150ms and (in the topological case) is easy to improve the starting prismatoid, with the information we have now (a reasonable objective function and cooling schedule) it looks like a promising idea.
+Another possibility to get a polytopal prismatoid is to repeat our procedure with \emph{geometric flips}. That is, instead of only using topological information, we could keep track of the coordinates of each vertex and allow only flips that are realizable geometrically. Originally we did not consider this because of its computational complexity. But since topological flips are achieved in 150ms and (in the topological case) is easy to improve the starting prismatoid, with the information we have now (a reasonable objective function and cooling schedule) it looks like a promising idea.
+
+We could also repeat our simulated annealing strategy, starting from our smallest prismatoids, and trying to improve heuristics for polytopability while preseving the number of vertices.
 
 If polytopal, these smaller examples of non d-step prismatoids could shed some light on the subject of the combinatorial diameter of polytopes. Studying them could help us understand the properties of combinatorial diameter, maybe even giving us information about the polynomial Hirsch conjecture.
 
 \begin{thebibliography}{99}
-\bibitem{counterexample}
-  F.~Santos.
-  A counter-example to the Hirsch Conjecture.
-  \emph{Ann.~Math.~(2)}, 176 (July 2012), 383--412. 
-  DOI: \href{http://dx.doi.org/10.4007/annals.2012.176.1.7}{10.4007/annals.2012.176.1.7}
+
 \bibitem{examples}
   \url{https://books.google.es/books?id=MNpJ4voD5PQC&pg=PA769&lpg=PA769&dq=#v=onepage&q&f=false}
-\bibitem{Lutz}
-  Björner, Anders, and Frank H. Lutz. "Simplicial manifolds, bistellar flips and a 16-vertex triangulation of the Poincaré homology 3-sphere." Experimental Mathematics 9.2 (2000): 275-289.
-\bibitem{data structure}
-  Boissonnat, Jean-Daniel, and Sebastien Tavenas. "Building efficient and compact data structures for simplicial complexes." arXiv preprint arXiv:1503.07444 (2015).
-\bibitem{SantosFlips}
-  Santos, Francisco. "Geometric bistellar flips. The setting, the context and a construction." arXiv preprint math/0601746 (2006).
+  \copa{pon la referencia completa!!}
 
-\bibitem{polymake} 
-  \url{http://polymake.org}
-\bibitem{github}
-  \url{http://github.com/criado/tfm}
-\bibitem{ManiWalkup} 
-  Mani, Peter, and David W. Walkup. "A 3-sphere counterexample to the Wv-path conjecture." Mathematics of Operations Research 5.4 (1980): 595-598.
-\bibitem{improvement} improvement %HELPME no lo encuentro.
+%% sorted 
 
-\bibitem{mypaper}
-  F.~Criado, F.~Santos.
-  The maximum diameter of pure simplicial complexes and pseudo-manifolds.
-  \url{https://arxiv.org/abs/1603.06238}
-\bibitem{LutzMimi}
-  Joswig, Michael, Frank H. Lutz, and Mimi Tsuruga. "Sphere recognition: Heuristics and examples." arXiv preprint arXiv:1405.3848 (2014).
-
-\bibitem{optimumSA}
-  Granville, Vincent, Mirko Krivánek, and J-P. Rasson. "Simulated annealing: A proof of convergence." IEEE transactions on pattern analysis and machine intelligence 16.6 (1994): 652-656.
-\bibitem{adaptativeSA}
-  Ingber, Lester, et al. "Adaptive simulated annealing." Stochastic global optimization and its applications with fuzzy adaptive simulated annealing. Springer Berlin Heidelberg, 2012. 33-62.
+\bibitem{AbbottKatchalski}
+H.~L.~Abbott and M.~Katchalski, On the snake in the box problem, \emph{Journal of Combinatorial Theory, Series B} {\bf 44} (1988) 12--24.
 
 \bibitem{nonPolytopal}
   Altshuler, Amos. "The Mani-Walkup spherical counterexamples to the W v-path conjecture are not polytopal." Mathematics of operations research 10.1 (1985): 158-159.
 
-\bibitem{Pachner}
-  Pachner, Udo. "PL homeomorphic manifolds are equivalent by elementary shellings." European journal of Combinatorics 12.2 (1991): 129-145.
+\bibitem{Lutz}
+  Björner, Anders, and Frank H. Lutz. "Simplicial manifolds, bistellar flips and a 16-vertex triangulation of the Poincaré homology 3-sphere." Experimental Mathematics 9.2 (2000): 275-289.
 
-\bibitem{AbbottKatchalski}
-H.~L.~Abbott and M.~Katchalski, On the snake in the box problem, \emph{Journal of Combinatorial Theory, Series B} {\bf 44} (1988) 12--24.
+\bibitem{data structure}
+  Boissonnat, Jean-Daniel, and Sebastien Tavenas. "Building efficient and compact data structures for simplicial complexes." arXiv preprint arXiv:1503.07444 (2015).
+
+\bibitem{mypaper}
+  F.~Criado, F.~Santos.
+  The maximum diameter of pure simplicial complexes and pseudo-manifolds.
+  Preprint, 2016.
+  \url{https://arxiv.org/abs/1603.06238}
+
+\bibitem{github}
+  \url{http://github.com/criado/tfm}
+
+\bibitem{polymake} 
+E.~Gawrilow and M.~Joswig,
+Polymake: A software package for analyzing convex polytopes,
+in \emph{Polytopes---combinatorics and computation (Oberwolfach, 1997)},
+DMV Sem.~\textbf{29}, Birkh\"auser, 2000, pp.~43--73.
+Software available at \url{http://polymake.org}
+
+\bibitem{optimumSA}
+  Granville, Vincent, Mirko Krivánek, and J-P. Rasson. "Simulated annealing: A proof of convergence." IEEE transactions on pattern analysis and machine intelligence 16.6 (1994): 652-656.
+
+\bibitem{adaptativeSA}
+  Ingber, Lester, et al. "Adaptive simulated annealing." Stochastic global optimization and its applications with fuzzy adaptive simulated annealing. Springer Berlin Heidelberg, 2012. 33-62.
+
+\bibitem{LutzMimi}
+  Joswig, Michael, Frank H. Lutz, and Mimi Tsuruga. "Sphere recognition: Heuristics and examples." arXiv preprint arXiv:1405.3848 (2014).
 
 \bibitem{Kalai:polymath3}
 G.~Kalai et al., \emph{Polymath 3: Polynomial Hirsch Conjecture}, September 2010,
@@ -754,6 +772,28 @@ G.~Kalai et al., \emph{Polymath 3: Polynomial Hirsch Conjecture}, September 2010
 R.~Lidl and G.~Pilz,
  \emph{Applied Abstract Algebra},
  Springer New York, 1997.
+
+\bibitem{ManiWalkup} 
+  Mani, Peter, and David W. Walkup. "A 3-sphere counterexample to the Wv-path conjecture." Mathematics of Operations Research 5.4 (1980): 595-598.
+
+\bibitem{improvement}
+Benjamin Matschke, Francisco Santos, Christophe Weibel, The width of 5-dimensional prismatoids
+arXiv:1202.4701
+Proc. London Math. Soc., Vol 110 (3) (2015), 647-672. DOI: 10.1112/plms/pdu064
+
+\bibitem{Pachner}
+  Pachner, Udo. "PL homeomorphic manifolds are equivalent by elementary shellings." European journal of Combinatorics 12.2 (1991): 129-145.
+
+\bibitem{counterexample}
+  F.~Santos.
+  A counter-example to the Hirsch Conjecture.
+  \emph{Ann.~Math.~(2)}, 176 (July 2012), 383--412. 
+  DOI: \href{http://dx.doi.org/10.4007/annals.2012.176.1.7}{10.4007/annals.2012.176.1.7}
+
+\bibitem{SantosFlips}
+F. Santos, Geometric bistellar flips. The setting, the context and a construction.
+arXiv:math.CO/0601746
+In Proceedings of the International Congress of Mathematicians, Madrid, August 22-30, 2006 (Marta Sanz-Solé, Javier Soria, Juan Luis Varona, Joan Verdera, eds.), European Mathematical Society, 2006, Vol III, pp. 931-962. ISBN 978-3-03719-022-7 
 
 \bibitem{Santos:progress}
 F.~Santos, Recent progress on the combinatorial diameter of polytopes and simplicial complexes,

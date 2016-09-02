@@ -8,9 +8,9 @@
 void prismatoid::cascadeFacets() {
   queue<mask> q; base1=base2=0; numFacets=0;
 
-  for(auto\& it: SC) q.push(it.first),
-                    base1|= LAYER1 \& it.first,
-                    base2|= LAYER2 \& it.first,
+  for(auto& it: SC) q.push(it.first),
+                    base1|= LAYER1 & it.first,
+                    base2|= LAYER2 & it.first,
                     numFacets++;
 
   while(!q.empty()) {
@@ -28,8 +28,8 @@ void prismatoid::cascadeFacets() {
 }
 
 // Crosspolytope constructor
-prismatoid::prismatoid(int \_dim) {
-  dim=\_dim; SC=map<uint,uint>(); mask f; base2=(1<<dim)-1; base1=base2<<N;
+prismatoid::prismatoid(int _dim) {
+  dim=_dim; SC=map<uint,uint>(); mask f; base2=(1<<dim)-1; base1=base2<<N;
 
   for(uint i=1; i<base2; i++) f=(i|((i<<N)^base1)), SC[f]=f;
   cascadeFacets();
@@ -39,7 +39,7 @@ prismatoid::prismatoid(int \_dim) {
 // -first line: dim, number of facets
 // -next lines: each line is a new facet.
 // The vertices 0..N-1 are in base2 and N..2N-1 in base1 (N=10).
-prismatoid::prismatoid(istream\& input) {
+prismatoid::prismatoid(istream& input) {
   SC=map<mask,mask>();
 
   input>>dim>>numFacets;
@@ -52,10 +52,10 @@ prismatoid::prismatoid(istream\& input) {
 }
 
 // Write prismatoid to file in the same format.
-void prismatoid::write(ostream\& output) {
+void prismatoid::write(ostream& output) {
   output<<dim<<" "<<numFacets<<endl;
-  for(auto\& it: SC) if(countBits(it.first)==dim) {
-    for(int i=0; i<2*N; ++i) if((it.first\&(1<<i))!=0) output<<i<<" ";
+  for(auto& it: SC) if(countBits(it.first)==dim) {
+    for(int i=0; i<2*N; ++i) if((it.first&(1<<i))!=0) output<<i<<" ";
     
     output<<endl;
   }
@@ -68,14 +68,14 @@ void prismatoid::write(ostream\& output) {
 // Inits the option set.
 void prismatoid::initOptions() {
   options=map<mask,int>();
-  for(auto \&it:SC) if(countBits(it.first)==dim-1) options[it.second]++;
+  for(auto &it:SC) if(countBits(it.first)==dim-1) options[it.second]++;
 }
 
 // Finds a move or crashes tryin'.
-flip prismatoid::findFlip(rng\& gen) {
+flip prismatoid::findFlip(rng& gen) {
   flip fl;
   
-  uniform\_int\_distribution<int> dis(0, options.size()-1);
+  uniform_int_distribution<int> dis(0, options.size()-1);
   auto origin = options.begin(); advance(origin, dis(gen));
 
   for(auto it= origin; it!= options.end(); ++it)
@@ -116,7 +116,7 @@ void prismatoid::execFlip(flip fl) {
 
     // The supersets of l are appearing faces.
     else if(in(l,x)) {
-      SC[x]= (countBits(f\&~x)==1)? ((f\&x)|l|v): u;
+      SC[x]= (countBits(f&~x)==1)? ((f&x)|l|v): u;
       if(countBits(x)==dim) q.push(x),++numFacets;
       if(countBits(x)==dim-1) {
         if(in(x,base2)) adyBase2.insert(x);
@@ -126,13 +126,13 @@ void prismatoid::execFlip(flip fl) {
     // Stuff that remain the same.
     else { 
       if(countBits(x)==dim-1) if(--options[SC[x]]==0) options.erase(SC[x]);
-      SC[x]\&=~u; SC[x]|= ((countBits(f\&~x)==1)? ((f\&x)|l|v): u);
+      SC[x]&=~u; SC[x]|= ((countBits(f&~x)==1)? ((f&x)|l|v): u);
       if(countBits(x)==dim-1) ++options[SC[x]];
     }
 
   } while(nextSubset(u,x), x!=u);
 
-  base1=SC[0]\&LAYER1; base2=SC[0]\&LAYER2; updateDists(q);
+  base1=SC[0]&LAYER1; base2=SC[0]&LAYER2; updateDists(q);
 
   #ifdef DEBUG
     if(!everythingIsOK()) {
@@ -147,7 +147,7 @@ void prismatoid::execFlip(flip fl) {
 }
 
 // Makes a random move. Returns its (f,l,v).
-flip prismatoid::execFlip(rng\& gen) { 
+flip prismatoid::execFlip(rng& gen) { 
   flip fl=findFlip(gen); execFlip(fl); return fl;
 }
 
@@ -159,14 +159,14 @@ flip prismatoid::execFlip(rng\& gen) {
 // - The ustar of f has exactly dim+1 vertices
 // - The corresponding l is not in the complex.
 // Returns the flip by reference.
-bool prismatoid::checkFlip(mask u, flip\& fl) {
+bool prismatoid::checkFlip(mask u, flip& fl) {
   mask f,l,v;
 
   if(countBits(u)==dim) { // Add a vertex to the support when required.
     mask newv, LAYER;
 
-    if     (countBits(u\&LAYER2)==1) newv= firstElement(LAYER1 \&~base1);
-    else if(countBits(u\&LAYER1)==1) newv= firstElement(LAYER2 \&~base2);
+    if     (countBits(u&LAYER2)==1) newv= firstElement(LAYER1 &~base1);
+    else if(countBits(u&LAYER1)==1) newv= firstElement(LAYER2 &~base2);
     else cerr<<"Error 841: Not enough cheese in buffer."<<endl;
     
     if(newv==0) return false; u|=newv;
@@ -174,22 +174,22 @@ bool prismatoid::checkFlip(mask u, flip\& fl) {
 
   f=u;
   for(mask x=firstElement(u); x!=0; nextElement(u,x))
-    if(SC.find(u^x)!=SC.end()) f\&=u^x;
+    if(SC.find(u^x)!=SC.end()) f&=u^x;
   l=u^f; 
 
-  if      (countBits(u\&base1)==1) v=(u\&base1), f^=v; 
-  else if (countBits(u\&base2)==1) v=(u\&base2), f^=v;
+  if      (countBits(u&base1)==1) v=(u&base1), f^=v; 
+  else if (countBits(u&base2)==1) v=(u&base2), f^=v;
   else v=0;
 
   // Interior flips should not add new frontier faces.
-  if(v==0 \&\& (in(l,base1) || in(l,base2))) return false;
+  if(v==0 && (in(l,base1) || in(l,base2))) return false;
 
   // Am I adding/removing a vertex?
   //if(!changeBases \&\& (countBits(l)==1 || countBits(f)==1)) return false;
 
   // Correct size of the support
-  if(v==0 \&\& countBits(SC[f])!=dim+1) return false;
-  if(v!=0 \&\& countBits(SC[f])!=dim)   return false;
+  if(v==0 && countBits(SC[f])!=dim+1) return false;
+  if(v!=0 && countBits(SC[f])!=dim)   return false;
 
   // l must not be in SC.
   if(SC.find(l)!=SC.end()) return false;
@@ -205,27 +205,27 @@ bool prismatoid::checkFlip(mask u, flip\& fl) {
 void prismatoid::initGraph() {
   adyBase2=set<mask>(); queue<mask> q;
 
-  for(auto \&it:SC) {
+  for(auto &it:SC) {
     if(countBits(it.first)==dim-1) {
-      if     ((LAYER1 \& it.first)==0) adyBase2.insert(it.first);
-      else if((LAYER2 \& it.first)==0) q.push(it.second);
+      if     ((LAYER1 & it.first)==0) adyBase2.insert(it.first);
+      else if((LAYER2 & it.first)==0) q.push(it.second);
   } }
   dists=map<mask,il>(); updateDists(q);
 }
 
 
 // Stuff for the computation of the diameter and width.
-inline void relaxPair(il\& me, il\& other) {
+inline void relaxPair(il& me, il& other) {
   if(other.first+1<me.first)       me.first = other.first+1,
                                    me.second= other.second;
   else if(other.first+1==me.first) me.second+=other.second;
 }
-void prismatoid::updateDists(queue<mask>\& q) {
+void prismatoid::updateDists(queue<mask>& q) {
 
   while(!q.empty()) {
     mask f=q.front(), f2; q.pop();
 
-    if(countBits(base1\&f)==dim-1) {
+    if(countBits(base1&f)==dim-1) {
       if(dists[f]==il(1,1)) continue;
       dists[f]=il(1,1);
 
@@ -238,7 +238,7 @@ void prismatoid::updateDists(queue<mask>\& q) {
       il aux(200,0);
       for(mask x= firstElement(f); x!=0; nextElement(f,x))
         if(SC.find(f^x)!=SC.end())
-          if(countBits(f2=SC[f^x]^x)==dim \&\& dists.find(f2)!=dists.end())
+          if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
             relaxPair(aux, dists[f2]);
 
       if(aux!=dists[f]) {
@@ -249,16 +249,16 @@ void prismatoid::updateDists(queue<mask>\& q) {
   } } } 
 
   il aux(200,0);
-  for(auto \&it: adyBase2) relaxPair(aux, dists[SC[it]]);
+  for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
   assert(aux.first!=1); distBase2=aux;
 }
 
 // Number of vertices, distance and width
 double prismatoid::cost() {
-  #ifdef PLAN\_A
+  #ifdef PLAN_A
   return double(numFacets);
   #endif
-  #ifdef PLAN\_B
+  #ifdef PLAN_B
   mask vertices=base1|base2;
   double avg=0.0;
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
@@ -267,19 +267,19 @@ double prismatoid::cost() {
 
   return exp(avg);
   #endif
-  #ifdef PLAN\_C
+  #ifdef PLAN_C
   mask vertices=base1|base2;
   vector<double> ustars;
   
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
-    ustars.push\_back((double)countBits(SC[x]));
+    ustars.push_back((double)countBits(SC[x]));
   sort(ustars.begin(),ustars.end());
   return ustars[0]+ustars[1]+ustars[2]+ustars[3];
   #endif
-  #ifdef PLAN\_D
+  #ifdef PLAN_D
   return SC.size();
   #endif
-  #ifdef PLAN\_E
+  #ifdef PLAN_E
   mask vertices=base1|base2;
   double avg=0.0, k=-3.0;
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
@@ -287,12 +287,12 @@ double prismatoid::cost() {
 
   return countBits(vertices)*600 + (pow(avg,1/k)+dim);
   #endif
-  #ifdef PLAN\_Z
+  #ifdef PLAN_Z
   return (distBase2.first>dim)?-1e10:distBase2.second;
   #endif
 }
 bool prismatoid::feasible() {
-  #ifndef PLAN\_Z
+  #ifndef PLAN_Z
     return distBase2.first>dim;
   #else
     return true;
@@ -302,10 +302,10 @@ bool prismatoid::feasible() {
 // f-vector and layers.
 pair<vi, vi> prismatoid::statsForSantos() {
   vi fvector(dim+1), layers(dim+2);
-  for(auto \&it: SC) fvector[countBits(it.first)]++;
-  for(auto \&it: dists) layers[it.second.second]++;
+  for(auto &it: SC) fvector[countBits(it.first)]++;
+  for(auto &it: dists) layers[it.second.second]++;
 
-  return make\_pair(fvector, layers);
+  return make_pair(fvector, layers);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -318,24 +318,24 @@ bool prismatoid::everythingIsOK() {
 
   // 1: is SC a simplicial complex?
   //*
-  for(auto\& it: SC)
+  for(auto& it: SC)
     for(mask x=firstElement(it.first); x!=0; nextElement(it.first,x))
-      if(SC.find(it.first\&~x)==SC.end()||!in(it.second,SC[it.first\&~x])) { 
+      if(SC.find(it.first&~x)==SC.end()||!in(it.second,SC[it.first&~x])) { 
         cout<<"I find your lack of queso annoying"<<endl;
         cout<<"face and ustar"<<endl;
         printMask(it.first);
         printMask(it.second);
         cout<<"son and ustar"<<endl;
-        printMask(it.first\&~x);
-        printMask(SC[it.first\&~x]);
+        printMask(it.first&~x);
+        printMask(SC[it.first&~x]);
         return false;
       }
   /**/
 
   // 1.5: Pure simplicial complex
   //*
-  for(auto \&it: SC) 
-    if(it.first==it.second \&\& countBits(it.first)!=dim) {
+  for(auto &it: SC) 
+    if(it.first==it.second && countBits(it.first)!=dim) {
       cout<<"sssh, no tears. Only "<<numflips<<" dreams now"<<endl;
       return false;
     }
@@ -343,7 +343,7 @@ bool prismatoid::everythingIsOK() {
 
   // 2: Every ridge must be internal xor in a base.
   //*
-  for(auto\& it: SC)
+  for(auto& it: SC)
     if(countBits(it.first)==dim-1)
       if((countBits(it.second)==dim+1) ==
          (in(it.first,base1) || in(it.first,base2))) {
@@ -358,7 +358,7 @@ bool prismatoid::everythingIsOK() {
   // 4: options is options
   //*
   map<mask, int> otherOptions; set<mask> otherAdyBase2;
-  for(auto\& it: SC)
+  for(auto& it: SC)
     if(countBits(it.first)==dim-1) {
       otherOptions[it.second]++;
       if(in(it.first, base2)) otherAdyBase2.insert(it.first);
@@ -371,7 +371,7 @@ bool prismatoid::everythingIsOK() {
     cout<<numflips<<" people thinking in piranhas right now"<<endl;
     return false;
   }
-  for(auto\& it: adyBase2){
+  for(auto& it: adyBase2){
     assert(SC.find(it)!=SC.end());
     if(dists.find(SC[it])==dists.end()) {
       cout<<numflips<<" likes in Facebook"<<endl;
@@ -384,7 +384,7 @@ bool prismatoid::everythingIsOK() {
 
   // 5: dists
   //*
-  for(auto\& it:SC)
+  for(auto& it:SC)
     if(countBits(it.first)==dim) {
       mask f=it.first, f2; il aux(200,0);
 
@@ -393,7 +393,7 @@ bool prismatoid::everythingIsOK() {
         return false;
       }
 
-      if(countBits(f\&base1)==dim-1) {
+      if(countBits(f&base1)==dim-1) {
         if(dists[f]==il(1,1)) continue;
         else {
           cout<<numflips<<" bottles standing at the wall"<<endl;
@@ -403,7 +403,7 @@ bool prismatoid::everythingIsOK() {
 
       for(mask x= firstElement(f); x!=0; nextElement(f,x))
         if(SC.find(f^x)!=SC.end())
-          if(countBits(f2=SC[f^x]^x)==dim \&\& dists.find(f2)!=dists.end())
+          if(countBits(f2=SC[f^x]^x)==dim && dists.find(f2)!=dists.end())
             relaxPair(aux, dists[f2]);
 
       if(aux!=dists[f]) {
@@ -412,7 +412,7 @@ bool prismatoid::everythingIsOK() {
       }
     }
   il aux(200,0);
-  for(auto \&it: adyBase2) relaxPair(aux, dists[SC[it]]);
+  for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
   if (aux!=distBase2) {
     cout<<numflips<<" heroes saving the day"<<endl;
     return false;
