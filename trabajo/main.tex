@@ -14,6 +14,7 @@
 \usepackage{amsmath}
 \usepackage{color}
 \usepackage[toc,page]{appendix}
+\usepackage{epigraph}
 
 \newcommand{\graph}{\operatorname{G}}
 \newcommand{\lk}{\operatorname{lk}}
@@ -152,9 +153,20 @@
  
 %	AUTHOR SECTION
 
-\large
-\emph{Author:} Francisco Criado Gallart \\
-\emph{Advisor:} Francisco Santos Leal
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Francisco Criado Gallart  % Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.5\textwidth}
+\begin{flushright} \large
+\emph{Advisor:} \\
+Francisco Santos Leal % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[4cm]
 
 % If you don't want a supervisor, uncomment the two lines below and remove the section above
 %\Large \emph{Author:}\\
@@ -188,6 +200,51 @@ This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 Intern
 
 \newpage
 
+\epigraph{Desvarío laborioso y empobrecedor el de componer vastos libros; el de explayar en quinientas páginas una idea cuya perfecta exposición oral cabe en pocos minutos. Mejor procedimiento es simular que esos libros ya existen y ofrecer un resumen, un comentario.}{Borges, \emph{Ficciones}}
+\pagestyle{plain}
+\newpage\
+\newpage
+
+\thispagestyle{plain}
+
+\section*{Acknowledgements} 
+\pagenumbering{roman}
+
+First, I wish to thank my advisor, professor \textbf{Francisco Santos}. He has been supportive years before I arrived in Santander, and even more when I arrived.
+
+Also, I want to thank professor \textbf{Michael Joswig} and his team in the discrete geometry group of the Technical University of Berlin, for all the help and advice they provided during my (short) visit to their department.
+
+Finally, I want to thank my friends at Cantabria, and my ``disciples'': Álvaro, Ana, Beatriz, Cristina, David, Esther, Jesús, Jon, Manu, Néstor, Sara and Susana.
+
+\newpage
+
+\begin{center}
+    %\Large
+    \textbf{Diameter of simplicial complexes: a computational approach}
+   
+    \vspace{0.5cm}
+    \textbf{Abstract}
+\end{center}
+The computational complexity of the simplex method, widely used for linear programming, depends on the combinatorial diameter of the edge graph of a polyhedron with $n$ facets and dimension $d$. Despite its popularity, little is known about the (combinatorial) diameter of polytopes, and even for simpler types of complexes. For the case of polytopes, it was conjectured by Hirsch (1957) that the diameter is smaller than $(n-d)$, but this was disproved by Francisco Santos (2010). In this thesis, we present two main results. First, a lower bound on the maximum diameter for two classes of simplicial complexes: pure simplicial complexes and pseudo-manifolds. Second, a topological improvement of Santos' counter example to the Hirsch Conjecture. This one is (slightly) smaller than the previously known smallest simplicial non-Hirsch sphere.
+\vspace{1cm}
+
+\textbf{Keywords}: Discrete Geometry, Computational Geometry, Simulated Annealing, Simplicial Complex, Combinatorial Diameter.
+
+\vspace{2cm}
+
+\begin{center}
+    %\Large
+    \textbf{Diametro de complejos simpliciales: un enfoque computacional}
+   
+    \vspace{0.5cm}
+    \textbf{Resumen}
+\end{center} 
+La complejidad computacional del método del símplex, ampliamente usado en programción lineal, depende del diámetro combinatorio del grafo de aristas de un poliedro con $n$ facetas y dimensión $d$. Pese a su popularidad, sabemos muy poco sobre el diámetro (combinatorio) de los politopos, incluso para clases más simples de complejos. Para el caso de los politopos, Hirsch (1957) conjeturó que el diámetro era menor que $n-d$, pero su conjetura fue refutada por Francisco Santos (2010). En esta memoria, presentamos dos resultados fundamentales. Primero, una cota inferior para el diámetro de dos clases de complejos simpliciales: complejos simpliciales puros y pseudo-variedades. Segundo, una mejora topológica del contraejemplo de Santos a al conjetura de Hirsch. Ésta es más pequeña que la anterior esfera simplical no Hirsch más pequeña que se conocía.
+\vspace{1cm}
+
+\textbf{Palabras clave}: Geometría discreta, Geometría computacional, Enfriamiento simulado, Complejo simplicial, Diámetro combinatorio.
+\newpage
+
 \tableofcontents
 \clearpage
 \vspace*{\fill}
@@ -214,7 +271,7 @@ The existence on non-Hirsch spheres has been known for about 35 years now~\cite{
 
 Let us mention that, although we speak of our sphere as a single example, in fact the program has given as output 5 prismatoids with the same parameters (dimension 5, 22 vertices, and width 6) and 100  5-dimensional prismatoids of width six and  number of vertices still smaller than the previously known non-Hirsch prismatoids with a number of vertices ranging from 17 and 22. (But we have checked shellability only for one of them, since no polynomial time algorithm to check shellability is known).
 
-As a final motivation for (the second part of) our work, we bring here a quote by Gil Kalai about the role of examples in mathematics~\cite{examples}:
+As a final motivation for (the second part of) our work, we bring here a quote by Gil Kalai about the role of examples in mathematics~\cite[p.~769]{examples}:
 
 \begin{quote}
 It is not unusual that a single example or a very few shape an entire mathematical discipline. [...] And it seems that overall, \emph{we are short of examples}. The methods for coming up with useful examples in mathematics (or counterexamples for commonly believed conjectures) are even less clear than the methods for proving mathematical statements.
@@ -480,6 +537,7 @@ The purpose of this second part is to find a non-Hirsch topological prismatoid b
 We will use the metaheuristic method of simulated annealing modifying the initial example vie topological bistellar flips.
 
 \subsection{Bistellar flips}
+\label{sub:flips}
 Bistellar flips are basic operation we perform in our complexes to transform them into hopefully simpler ones. The initial definition of a (topological) flip is as follows, first introduced in  \cite{Pachner} and then used in \cite{Lutz} for sphere simplification:
 
 \begin{definition}[Bistellar flips in manifolds~\cite{Lutz,Pachner}]
@@ -620,11 +678,13 @@ There is no need to store the dual graph, because it is implicit in the complex.
 
 Therefore, when we perform the flip, the new facets are inserted into a queue, and the distances are updated by cascading through the prismatoid.
 
-Finally, it is very important to have an unbiased generation of random flips. We imitate to some extent the techinque used in polymake \cite{polymake}. In polymake, there is a set of pairs $(f,l)$, called ``options'' satisfying some conditions for flipability, in particular conditions 1 and 2 of subsection 4.1~\ref{Bistellar flips}. The flips are categorized by dimension of $f$.
+Finally, it is very important to have an unbiased generation of random flips. We imitate to some extent the techinque used in polymake \cite{polymake}. In polymake, there is a set of pairs $(f,l)$, called ``options'' satisfying some conditions for flipability, in particular conditions 1 and 2 of subsection~\ref{sub:flips}. The flips are categorized by dimension of $f$.
 %
 Since every flip has the ustar of a ridge as support, we planned to simplify this by using ridges instead of the pairs $(f,l)$. However, several ridges may have the same ustar (making them correspond to the same potential flip). This makes this idea biased and some flips more likely than others.
 
-To avoid this bias, we store in \lstinline{options} the support instead. This is very convenient, as it makes also very easy to spot vertex-adding flips (which are represented by having a support of $d$ vertices). And it is also very easy to update, because in the ``fl-model'', after every flip, some potential flips may change their $f$ and $l$ while having the same support. And, since there is a bijection between a particular set of ustar of ridges and the set of flips (we have defined this bijection with the construction of $(f,l,v)$), it is easy to choose a random flip we just need to choose a random ustar and filter non-valid ones. So our approach is more stable, requires less changes to the data structure and it is a bit cleaner.
+To avoid this bias, we store in \lstinline{options} the support instead of the ridge that has that support as its ustar.
+
+This is very convenient, as it also makes it very easy to spot vertex-adding flips (which are represented by having a support of $d$ vertices). And it is also very easy to update, because in the ``fl-model'', after every flip, some potential flips may change their $f$ and $l$ while having the same support. And, since there is a bijection between a particular set of ustar of ridges and the set of flips (we have defined this bijection with the construction of $(f,l,v)$), it is easy to choose a random flip we just need to choose a random ustar and filter non-valid ones. So our approach is more stable, requires less changes to the data structure and it is a bit cleaner.
 \subsection{Implementation details}
 
 Along the course of the project we have developed several versions of the simulated annealing algorithm.
@@ -663,7 +723,7 @@ The class \lstinline{prismatoid} has some interesting attributes:
 The most relevant source files can be found also as an appendix. There are some smaller scripts for polymake, verification and file manipulation, written in perl, c++ and python that are not included here.
 
 \subsection{Experimental results}
-Using our approach, we have found 104 non-Hirsch topological prismatoids improving
+Using our approach, we have found 105 non-Hirsch topological prismatoids improving
 the best (geometrical) non-Hirsch prismatoid previously known~\cite{improvement}, which had 25 vertices. 5 of them have 16 vertices, (the minimum we have been able to get). Here is one of those. Vertices $0,1,2,3,4,5,6,7$ are in one base and vertices $a,b,c,d,e,f,g,h$ in the other one. The list of facets is arranged by ``layers'', meaning by this the number of vertices in one and the other base:
 
 \begin{tabular} {c|cc|cc|c}
@@ -692,7 +752,7 @@ the best (geometrical) non-Hirsch prismatoid previously known~\cite{improvement}
             & (0,3,4,c,e) &             &             &             &             
 \end{tabular}
 
-Checking whether a prismatoid is polytopal or not seems out of reach computationally, at least within the scope of this master's thesis. But we have done two partial checks:
+Checking whether this prismatoid is polytopal or not seems out of reach computationally, at least within the scope of this master's thesis. (We mention ideas on how to try to do it in the conclusions section).  But we have done two partial checks.
 \begin{itemize}
 \item We have checked that the two subcomplexes in the bases of the prismatoid are indeed $3$-dimensional polytopal spheres, as they should if the whole thing is polytopal.
 \item We have checked that the complex obtained by filling-in a triangulation of each of the bases is a shellable $4$-sphere.
@@ -719,15 +779,9 @@ We could also repeat our simulated annealing strategy, starting from our smalles
 If polytopal, these smaller examples of non d-step prismatoids could shed some light on the subject of the combinatorial diameter of polytopes. Studying them could help us understand the properties of combinatorial diameter, maybe even giving us information about the polynomial Hirsch conjecture.
 
 \begin{thebibliography}{99}
-
-\bibitem{examples}
-  \url{https://books.google.es/books?id=MNpJ4voD5PQC&pg=PA769&lpg=PA769&dq=#v=onepage&q&f=false}
-  \copa{pon la referencia completa!!}
-
-%% sorted 
-
 \bibitem{AbbottKatchalski}
 H.~L.~Abbott and M.~Katchalski, On the snake in the box problem, \emph{Journal of Combinatorial Theory, Series B} {\bf 44} (1988) 12--24.
+\copa{Ya solo te falta uniformizar el estilo. Unos pone ``Apellido, Nombre" y otros "Nombre Apellido" o "N.~Apellido"}
 
 \bibitem{nonPolytopal}
   Altshuler, Amos. "The Mani-Walkup spherical counterexamples to the W v-path conjecture are not polytopal." Mathematics of operations research 10.1 (1985): 158-159.
@@ -762,6 +816,11 @@ Software available at \url{http://polymake.org}
 
 \bibitem{LutzMimi}
   Joswig, Michael, Frank H. Lutz, and Mimi Tsuruga. "Sphere recognition: Heuristics and examples." arXiv preprint arXiv:1405.3848 (2014).
+
+\bibitem{examples}
+Gil Kalai, \emph{Combinatorics with a Geometric Flavor}.
+In ``Visions in Mathematics, GAFA 2000 Special volume, Part II",
+N. Alon, J. Bourgain, A. Connes, M. Gromov, V. Milman eds., 2010, pp. 742--791.
 
 \bibitem{Kalai:polymath3}
 G.~Kalai et al., \emph{Polymath 3: Polynomial Hirsch Conjecture}, September 2010,
