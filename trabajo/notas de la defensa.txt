@@ -1,0 +1,56 @@
+Trasparencias:
+--------------
+
+Comienzo: 12:02
+
+Theorem 2: el D debería (o podría) ser un D+2.
+
+Thm 1: 12:09
+
+degre --> degree
+
+Teorema (Santos) --> baile de d y d-1 (se dice "prismatoide de dimensión d-1" pero aquí hablas del *politopo* que es de dimension d...)
+
+Teorema (MSW) --> más baile ("dimension d-1=6")
+
+(creo recordar que también hay un baile en el corolario de los prismatoides topológicos.)
+
+simmulated --> simulated
+
+Fin: 12:26
+
+----------------------------
+
+Comentarios:
+
+Luis Felipe: 
+
+La memoria es un poco "defectuosa":
+
+- no se define "diámetro de un grafo".
+
+- no se define "politopalidad". Quizá mencionar que (a) hay complejos simpliciales homeormofos a la esfera pero no isomorfos al borde de ningún politopo simplicial (el ejemplo más pequeño es para una esfera S^3 con 8 vértices, referencia: libro de triangulaciones del maestro) y que (b) el número de esferas politopales crece (en d fija) como 2^{O(n\log n)} mientras que el de no politopales crece como 2^{\Omega(n^{d/2})}. Referencia: arXiv:1408.3501 (Nevo, Santos, Wilson; nota: no es la referencia original. Lo que se hace en este articulo es mejorar un poco las cotas inferiores))
+
+- referencia a la cota de \phi(n), si es facil de encontrar
+
+- faltan ejemplos. (Eg el ejemplo de la construcción de $\mathcal C$ que da en las trasparencias debería estar en la memoria): Quizá también el de como se pegan las 2^{d-1} facetas que salen de dar signos para formar un cilindro.
+
+- no se dice bien el número de facetas (mcm frente a max). Se dice que el complejo mathcal C es un ciclo cuando lo que quieres es un segmento.
+
+- bailes de d y d-1 en todos lados, por ejemplo en el teorema de la construcción LFSR
+
+- no se explica bien donde hacen falta que los coeficientes no sean nulos. De hecho, el caso que se explica es el que no lo necesita (porque un polinomio monino irreducible automáticamente tiene los coeficientes de grados d y 0 no nulos), y el que lo necesita se dice que es "igual que el anterior". A lo mejor basta con cambiar el orden y explicar en detalle el caso de faceta de borde en vez del de faceta interior. Podria ser util (para el lector) un lema que diga: si los coeficientes de una LFSR son no nulos, conociendo d términos cualesquiera de un segmento de longitud d+1 se puede recuperar el que falta.
+
+- en la memoria no aparece el 1.09; tras la tablita de "cotas previas", se podrían enunciar los tres teoremas que mejoran las tres entradas, tal y como están en las transparencias. También se debería enunciar en algún sitio la versión "topológica" de que "prismatoide no d-step" ==> "esfera no Hirsch". Se puede decir que la demostración es similar a la del caso geométrico y se omite (pero en el futuro artículo sí debe aparecer).
+
+- no estaría de más dar más detalles de los resultados experimentales: comparación de las diferentes (cinco) funciones objetivo; al final hay una "mejor", pero con las demás, ¿hasta dónde se consigue mejorar la función objetivo? ¿cómo cambian los tiempos de cálculo? Vamos, las famosas "estadísticas" que llevo más de un mes pidiendo y que todavía no he visto. (Cuestión metodológica).
+
+
+Nuria y Delfina:
+
+- un poco lo mismo; faltan definiciones, ejemplos, ...
+
+- por qué prismatoides topológicos en vez de geométricos?
+La respuesta corta es que el problema combinatorio/topológico es solo NP-completo, mientras que el de politopalidad es "existential theory of the reals" (nota; tendría que mirar la bibliografía, pero no es obvio que el problema de si una esfera es politopal esté en NP; para que esté en NP hace falta que toda esfera politopal se pueda realizar son coeficientes racionales cuyo tamaño bit sea polinómico en el tamaño combinatorio de la esfera).
+
+- comparar el Corolario 1 de la memoria con el cor 1.7 del artículo (hay un factor 2 y un sumando 1 vs 3 que cambia; seguramente la versión correcta es la del artículo.).

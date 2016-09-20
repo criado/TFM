@@ -119,7 +119,7 @@
   %title=\lstname,                   % show the filename of files included with \lstinputlisting; also try caption instead of title
   texcl=true
 }
-\title{ Diameter of simplicial complexes: \\ a computational approach}
+\title{ Diameter of simplicial complexes, \\ a computational approach}
 \author{Francisco Criado Gallart}
 \date{}
 
@@ -148,7 +148,7 @@
 %	TITLE SECTION
 
 \HRule \\[0.4cm]
-{ \huge \bfseries Diameter of simplicial complexes \\ a computational approach}\\[0.4cm] % Title of your document
+{ \huge \bfseries Diameter of simplicial complexes, \\ a computational approach}\\[0.4cm] % Title of your document
 \HRule \\[1.5cm]
  
 %	AUTHOR SECTION
@@ -220,7 +220,7 @@ Finally, I want to thank my friends at Cantabria, and my ``disciples'': Álvaro,
 
 \begin{center}
     %\Large
-    \textbf{Diameter of simplicial complexes: a computational approach}
+    \textbf{Diameter of simplicial complexes, a computational approach}
    
     \vspace{0.5cm}
     \textbf{Abstract}
@@ -234,12 +234,12 @@ The computational complexity of the simplex method, widely used for linear progr
 
 \begin{center}
     %\Large
-  \textbf{Diámetro de complejos simpliciales: un enfoque computacional}
+  \textbf{Diámetro de complejos simpliciales, un enfoque computacional}
    
     \vspace{0.5cm}
     \textbf{Resumen}
 \end{center} 
-La complejidad computacional del método del símplex, ampliamente usado en programción lineal, depende del diámetro combinatorio del grafo de aristas de un poliedro con $n$ facetas y dimensión $d$. Pese a su popularidad, sabemos muy poco sobre el diámetro (combinatorio) de los politopos, incluso para clases más simples de complejos. Para el caso de los politopos, Hirsch (1957) conjeturó que el diámetro era menor que $n-d$, pero su conjetura fue refutada por Francisco Santos (2010). En esta memoria, presentamos dos resultados fundamentales. Primero, una cota inferior para el diámetro de dos clases de complejos simpliciales: complejos simpliciales puros y pseudo-variedades. Segundo, una mejora topológica del contraejemplo de Santos a al conjetura de Hirsch. Ésta es más pequeña que la anterior esfera simplical no Hirsch más pequeña que se conocía.
+La complejidad computacional del método del símplex, ampliamente usado en programación lineal, depende del diámetro combinatorio del grafo de aristas de un poliedro con $n$ facetas y dimensión $d$. Pese a su popularidad, sabemos muy poco sobre el diámetro (combinatorio) de los politopos, incluso para clases más simples de complejos. Para el caso de los politopos, Hirsch (1957) conjeturó que el diámetro era menor que $n-d$, pero su conjetura fue refutada por Francisco Santos (2010). En esta memoria, presentamos dos resultados fundamentales. Primero, una cota inferior para el diámetro de dos clases de complejos simpliciales: complejos simpliciales puros y pseudo-variedades. Segundo, una mejora topológica del contraejemplo de Santos a la conjetura de Hirsch. Ésta es más pequeña que la anterior esfera simplical no Hirsch más pequeña que se conocía.
 \vspace{1cm}
 
 \textbf{Palabras clave}: Geometría discreta, Geometría computacional, Enfriamiento simulado, Complejo simplicial, Diámetro combinatorio.
@@ -255,7 +255,7 @@ La complejidad computacional del método del símplex, ampliamente usado en prog
 \section{Introduction}
 The problem of finding the combinatorial diameter of simplicial complexes, particularly polytopal simplicial complexes, arises naturally from the analysis of the simplex method. In the simplex algorithm, we start from a vertex of a polytope and we move from one vertex to a neighbour until we reach the ``best vertex'' of an objective function. Therefore, a natural question to ask is how long can this path of vertices be in the worst case or, equivalently, what is the maximum possible diameter of a polytopal simplicial complex, as a function of its diameter and number of vertices.
 
-For the case of polytopal simplicial complexes, it was conjectured by Hirsch (1957) that the diameter of a polytope with $n$ facets and dimension $d$ is at most $n-d$. This was disproven by Francisco Santos Leal (2010) \cite{counterexample}, who found a non-Hirsch polytope with $86$ facets and dimension $43$. His construction, and the smaller ones subsequently constructed in \cite{improvement}, depend on certain lower dimensional polytopes called \emph{prismatoids}. In particular, finding prismatoids satisfying certain property with a small number of vertices (or more significantly, with small difference ``vertices minus dimension'') will yield smaller counterexamples to the Hirsch Conjecture. It is also important to note it could still be that the diameter of all polytopes is linear on $n-d$, even if no polynomial upper bound is known~\cite{Kalai:polymath3}. It would be desirable to prove or disprove this fact, and find the linear constant if applicable. 
+For the case of polytopal simplicial complexes, it was conjectured by Hirsch (1957) that the diameter of a polytope with $n$ facets and dimension $d$ is at most $n-d$. This was disproven by Francisco Santos Leal (2010) \cite{counterexample}, who found a non-Hirsch polytope with $86$ facets, dimension $43$, and diameter $44$. His construction, and the smaller ones subsequently constructed in \cite{improvement}, depend on certain lower dimensional polytopes called \emph{prismatoids}. In particular, finding prismatoids satisfying certain property with a small number of vertices (or more significantly, with small difference ``vertices minus dimension'') will yield smaller counterexamples to the Hirsch Conjecture. It is also important to note it could still be that the diameter of all polytopes is linear on $n-d$, even if no polynomial upper bound is known~\cite{Kalai:polymath3}. It would be desirable to prove or disprove this fact, and find the linear constant if applicable. 
 
 Partially as a means to shed light on the Hirsch question, but also as a natural mathematical question in itself, it is interesting to study how big can the diameter of other classes of simplicíal complexes be, and learn from the examples that we may find in this greater generality. This approach was started by Adler and Dantzig in the early 70s and has been continued, for example, in \cite{ManiWalkup,nonPolytopal}. See~\cite{Santos:progress} for a recent survey of results. This is also the approach taken in this work, in which we present two contributions:
 
@@ -263,10 +263,10 @@ Partially as a means to shed light on the Hirsch question, but also as a natural
 \item First, we show how to construct pure simplicial complexes of a given dimension $d-1$ and number of vertices $n$ which have diameters equal (modulo a constant depending on $d$) to the trivial upper bound of $O(n^{d-1})$. We first do this for some particular complexes that we call corridors 
 (Theorem~\ref{thm:pure_complexes}) and then show how to go from any pure simplicial complex to a pseudo-manifold of the same dimension without significantly changing neither the diameter nor the number of vertices (Theorem~\ref{thm:pseudo_manifolds} and Corollary~\ref{coro:pseudo_manifolds}). These constructions improve the previously best ones which were of type $\Theta(n^{2d/3})$ for general complexes, and $\Theta(n^2)$ (no $d$ in the exponent) for pseudo-manifolds. Our constructions are algebraic and are based on a sequence produced by certain polynomials over a (large enough) finite field. They are inspired in the well-known constructions of \emph{linear-feedback shift registers} of maximal length. See the details in Section \ref{sec:mypaper}.
 
-\item We then introduce the concept of \emph{topologiacl prismatoids}, which generalize the (geometric) prismatoids from~\cite{counterexample,improvement}, and we implement a metaheuristic to search for topological prismatoids with the non-Hirsch property and smaller than the ones in~\cite{counterexample,improvement}. Our program has been able to find topological prismatoids of dimension $5$ with $16$ vertices and diameter $6$. If one of these spheres turns out to be polytopal, then we would have constructed non-Hirsch polytopes of dimension 11 and with 22 facets, while the current smallest ones have dimension 20 and 40 facets~\cite{improvement}. Our algorithm combines the ideas of  \emph{simulated annealing} (SA), a common metaheuristic technique widely used in optimization, with the notion of \emph{bistellar flips}, elementary transformations that change a simplicial complex in a local manner preserving its topology. Geometric bistellar flips are widely used in computatinal geometry and polyhedral combinatorics (see for example~\cite{SantosFlips}). The topological version that we use is very similar to the one used in~\cite{Lutz} in the context of triangulated manifold simplification, the main difference being that there only manifolds without boundary are used and here we need a version for manifolds with boundary. See the details in Section~\ref{sec:prismatoids}.
+\item We then introduce the concept of \emph{topological prismatoids}, which generalize the (geometric) prismatoids from~\cite{counterexample,improvement}, and we implement a metaheuristic to search for topological prismatoids with the non-Hirsch property and smaller than the ones in~\cite{counterexample,improvement}. Our program has been able to find topological prismatoids of dimension $5$ with $16$ vertices and diameter $6$. If one of these spheres turns out to be polytopal, then we would have constructed non-Hirsch polytopes of dimension 11 and with 22 facets, while the current smallest ones have dimension 20 and 40 facets~\cite{improvement}. Our algorithm combines the ideas of  \emph{simulated annealing} (SA), a common metaheuristic technique widely used in optimization, with the notion of \emph{bistellar flips}, elementary transformations that change a simplicial complex in a local manner preserving its topology. Geometric bistellar flips are widely used in computational geometry and polyhedral combinatorics (see for example~\cite{SantosFlips}). The topological version that we use is very similar to the one used in~\cite{Lutz} in the context of triangulated manifold simplification, the main difference being that,  there only manifolds without boundary are used and here, we need a version for manifolds with boundary. See the details in Section~\ref{sec:prismatoids}.
 \end{itemize}
 
-Even if our example turned out to be nonpolytopal, it implies the existence of a sphere of dimension 10 and with 22 vertices whose diameter is greater than 11. This is an example of a non-Hirsch sphere (a $d-1$-sphere with $n$ vertices and diameter greater than $n-d$).
+Even if our example turned out to be nonpolytopal (which could happen because not all simplicial spheres can be obtained from a polytope), it implies the existence of a sphere of dimension 10 and with 22 vertices whose diameter is greater than 11. This is an example of a non-Hirsch sphere (a $d-1$-sphere with $n$ vertices and diameter greater than $n-d$).
 The existence on non-Hirsch spheres has been known for about 35 years now~\cite{ManiWalkup}, but the smallest ones previously known are slightly bigger than ours: dimension 11 and 24 vertices in~\cite{ManiWalkup}. Both the sphere in~\cite{ManiWalkup} and the one we construct are~\emph{shellable}, a purely combinatorial property meaning basically that the sphere can be constructed one simplex at a time in such a way that all the intermediate complexes are balls. Shellability is a necessary condition for polytopality, but it is not sufficient. In fact, the sphere of~\cite{ManiWalkup} was proved to be non-polytopal in~\cite{nonPolytopal}. For the sphere we construct polytopality is unknown.
 
 Let us mention that, although we speak of our sphere as a single example, in fact the program has given as output 5 prismatoids with the same parameters (dimension 5, 22 vertices, and width 6) and 100  5-dimensional prismatoids of width six and  number of vertices still smaller than the previously known non-Hirsch prismatoids with a number of vertices ranging from 17 and 22. (But we have checked shellability only for one of them, since no polynomial time algorithm to check shellability is known).
@@ -281,7 +281,7 @@ It is not unusual that a single example or a very few shape an entire mathematic
 
 \subsection{Definitions}
 \begin{definition}
-  A \emph{simplicial complex}  is a set $\mathcal{S}=\{s_1,\dots,s_n\}$ of sets, such that  $\forall s\in \mathcal{S}, \  \forall f\subset s, f\in{S}$. The complex is \emph{pure of dimension $d-1$} if every maximal element of $\mathcal{S}$ has $d$ vertices.
+  A \emph{simplicial complex}  is a set $\mathcal{S}=\{s_1,\dots,s_n\}$ of sets, such that $\forall s\in \mathcal{S}, \  \forall f\subset s, f\in{S}$. The complex is \emph{pure of dimension $d-1$} (PSC) if every maximal element of $\mathcal{S}$ has $d$ elements.
 
   The elements of $\mathcal{S}$ are called \emph{faces}, and some faces have special names:
   \begin{description}
@@ -296,6 +296,8 @@ It is not unusual that a single example or a very few shape an entire mathematic
 
 \begin{example}
   The boundary of an octahedron in the three-dimensional space is a pure simplicial complex of dimension $2$, that is, $d=3$. It has eight facets, twelve ridges (that are also edges) and six vertices. It is also homeomorphic to the 2-dimenisonal sphere $\mathbb{S}^2$.
+
+  In general, given a basis for the affine space $\mathbb{R}^n$, $e_1,\dots,e_n$, the convex hull of $\{\pm e_1,\dots,\pm e_n\}$, which is called a \emph{crosspolytope}, is a PSC with $2n$ vertices, $2^n$ facets, and homeomorphic to a $(n-1)$-sphere.
 \end{example}
 
 \begin{definition}
@@ -330,8 +332,9 @@ Observe that the dual simplicial complex of a polytope $P$ is the face complex o
 
 \begin{definition}
   A \emph{prismatoid} is a polytope $Q$ with two parallel facets $Q^+$ and $Q^-$, that we call the \emph{bases}, containing all the vertices. We call a prismatoid \emph{simplicial} if all faces except perhaps $Q^+$ and $Q^-$ are simplices. Observe that the faces of a prismatoid of dimension $d$, excluding the two bases, form a simplicial complex of dimension $d-1$ and homeomorphic to the product of $\mathbb{S}^{d-2}$ with a segment. We call this complex the prismatoid complex of $Q$.
-  
-  The width of a prismatoid is the distance in the dual graph from one base to the other, or, to be more in agreement with our definitions above, it is two plus the minimum distance butween a facet adjacent to a base and a facet adjacent to the other base.
+\end{definition}
+\begin{definition}
+  The \emph{width} of a prismatoid is the distance in the dual graph from one base to the other, or, to be more in agreement with our definitions above, it is two plus the minimum distance butween a facet adjacent to a base and a facet adjacent to the other base.
 \end{definition}
 
 \begin{theorem}[Strong d-step theorem for prismatoids\cite{counterexample}]
@@ -345,7 +348,7 @@ There is a prismatoid with $28$ vertices, dimension $5$ and width $6$. That is, 
 \end{theorem}
 
 \begin{remark}
-The best example in \cite{improvement} has actually 25 and not 28 vertices. But in our computations in section~\ref{sec:prismatoids} we take the one with 28 vertices as the initial state for the SA, because it has much more symmetry and is thus easier to input. Part of our goal was in fact to see whether we could go from the 28 example to one smaller than 25, in order to compare our methods with the half-computational ones used in~\cite{improvement}.
+The best example in \cite{improvement} has actually 25 and not 28 vertices. But in our computations in section~\ref{sec:prismatoids} we take the one with 28 vertices as the initial state for the simulated annealing, because it has much more symmetry and is thus easier to input. Part of our goal was in fact to see whether we could go from the 28 example to one smaller than 25, in order to compare our methods with the half-computational ones used in~\cite{improvement}.
 \end{remark}
 
 One of our main results in this project is a simplification of the Matschke-Santos-Weibel example, but in a topological sense. We now define the main object we are working with:
@@ -388,7 +391,7 @@ For the case of pseudo-manifolds, the best known lower bound was quadratic. The 
 
 \section{The maximum diameter of pure simplicial complexes and pseudo-manifolds}
 \label{sec:mypaper}
-This section is based in my preprint~\cite{mypaper}
+This section is based in our preprint~\cite{mypaper}
 
 \subsection{pure simplicial complexes}
 Our bound for the pure simplicial complex case is as follows:
@@ -405,7 +408,7 @@ in $\Theta(d^{3/2}e^{-d})$, since $d!\simeq e^{-d}d^d \sqrt{2\pi d}$.
 
 \begin{remark}
 Our proof of Theorem~\ref{thm:pure_complexes} uses an arithmetic construction valid only when the number $n$ of vertices is of the form $q(d+2)$ for a sufficiently large prime power $q$. 
-But every interval $[m,2m]$ contains an $n$ of that form, because there is a power of $2$ between $m/(d+2)$ and $m/2(d+2)$). 
+But every interval $[m,2m]$ contains an $n$ of that form, because there is a power of $2$ between $m/(d+2)$ and $m/(2(d+2))$). 
 Hence, the theorem is also valid ``for every $d$ and sufficiently large $n$'', modulo an extra factor of $2^{d-1}$ in the denominator.
 \end{remark}
 
@@ -452,22 +455,22 @@ Suppose that $p(x)\in \F_q[x]$ is a primitive polynomial of degree $d-1$ with no
 \begin{proof}
 Our set of vertices is $V=\F_q \times [d+2]$. That is, we have as vertices the elements of $\F_q$ but each comes in $d+2$ different ``colors''. In the sequence $(u_i)_{i\in \N}$ of Theorem~\ref{thm:sequence} we color its terms cyclically. That is, call
 \[
-v_i=(u_i,\ n \mod(d+2)).
+v_i=(u_i,\ i \mod(d+2)).
 \]
 Let $C$ be the simplicial complex consisting of the intervals of length $d$ in the sequence $(v_i)_{i\in \N}$. That is, we let:
 \[
 F_i= \{v_i,\dots,v_{i+d-1}\}, \qquad
-C= \left\{F_i : i\in \{1,\dots, q^d-1\} \right\}.
+C= \left\{F_i : i\in \{1,\dots, \text{lcm}(q^{d-1}-1, d+2)\} \right\}.
 \]
-Observe that the sequence $\{F_i\}_{i\in \N}$ is periodic of period $\lcm\{q^d-1, d+2\} \ge q^d-1=\frac{n^{d-1}}{(d+2)^{d-1}}-1$. Also, by construction, $\graph(C)$ contains a Hamiltonian cycle. We claim that, in fact, $\graph(C)$ equals that cycle. 
+Observe that the sequence $\{F_i\}_{i\in \N}$ is periodic of period $\lcm\{q^{d-1}-1, d+2\} \ge q^{d-1}-1=\frac{n^{d-1}}{(d+2)^{d-1}}-1$. Also, by construction, $\graph(C)$ contains a Hamiltonian cycle. We claim that, in fact, $\graph(C)$ equals that cycle. 
 
 For this, observe that ridges in  $C$ are of two types: some are of the form $\{v_i,\dots,v_{i+d-2}\}$ and some are of the form $\{v_i,\dots,v_j,v_{j+2},\dots,v_{i+d-1}\}$. We will study the facets that these types of ridges may belong to.
 
 For a ridge $R=\{v_i,\dots,v_{i+d-2}\}$ to be contained in a facet $F$ we need the color of the vertex in $F\setminus R$ to be either $i-1$ or $i+d-1$ (modulo $d+2$).
 
-Once we have  the color $c$ of the new vertex $v=(u,c)\in F\setminus R$, the recurrence relation (and the fact that $p$ has non-zero coefficients) gives us only one choice for $u$. Thus, $R$ is only contained in the two contiguous facets $F_{i-1}$ and $F_i$.
+Once we have  the color $c$ of the new vertex $v=(u,c)\in F\setminus R$, the recurrence relation (and the fact that the first and last coefficients of $p$ are non-zero) gives us only one choice for $u$. Thus, $R$ is only contained in the two contiguous facets $F_{i-1}$ and $F_i$.
 
-The same argument applies to a ridge $\{v_i,\dots,v_j,v_{j+2},\dots,v_{i+d-1}\}$. Now the color of the new vertex must be $j+1\mod d+2$ and the recurrence relation implies the vertex to be precisely $v_{j+1}$.
+The same argument applies to a ridge $\{v_i,\dots,v_j,v_{j+2},\dots,v_{i+d-1}\}$. Now the color of the new vertex must be $j+1\mod d+2$ and the recurrence relation (and the condition $a_i!=0 \forall i=1\dots d-1$) implies the vertex to be precisely $v_{j+1}$.
 \end{proof}
 
 \medskip
@@ -492,7 +495,7 @@ A stronger statement is known for the graph of a $d$-dimensional hypercube: it c
 
 \begin{theorem}
 \label{thm:pseudo_manifolds}
-For every strongly connected pure $(d-1)$-dimensional simplicial complex with $n$ vertices and diameter $\delta$ there is a $(d-1)$-dimensional pseudo-manifold without boundary with $2n$ vertices and diameter at least $\delta+2$.
+For every strongly connected pure $(d-1)$-dimensional simplicial complex (that is, a PSC with connected dual graph) with $n$ vertices and diameter $\delta$ there is a $(d-1)$-dimensional pseudo-manifold without boundary with $2n$ vertices and diameter at least $\delta+2$.
 \end{theorem}
 
 Let $C$ be the simplicial complex in the statement and $V$ its vertex set. By \cite[Corollary 2.7]{Santos:progress} there is no loss of generality in assuming that $C$ is a \emph{corridor}. That is, its dual graph is a path, so its facets come with a natural order $F_0.\dots, F_\delta$. 
@@ -581,7 +584,7 @@ Only a boundary flip can modify the boundary. That means that only boundary flip
 One remark that is important for the implementation is that from the support of a flip (the set $f\cup l \cup v$ of vertices involved in the flip), we can determine if the flip is a boundary or an interior flip and recover the sets $f$, $l$ and $v$:
 
 \begin{itemize}
-\item In a boundary flip the support has a single vertex ($v$) in one of the components, and $d$ in the other one, while in an interior flip it has at least two vertices in each: $l$ has a vertex from each component by definition, and $f$ has at least another from each base because the condition $\text{link}(f)=\partial(l)$, with $|f|+|l|=d+1$, implies that $f$ is an interior face.
+\item In a boundary flip, the support has a single vertex ($v$) in one of the components, and $d$ in the other one, while in an interior flip it has at least two vertices in each: $l$ has a vertex from each component by definition, and $f$ has at least another from each base because the condition $\text{link}(f)=\partial(l)$, with $|f|+|l|=d+1$, implies that $f$ is an interior face.
 
 \item In both cases, the set $f\cup v$ equals the intersection of all facets of $\mathcal{C}$ contained in $f\cup l \cup v$. This allows us to recover $f$, and hence $l$, once we know $v$ by the provious point.
 \end{itemize}
@@ -631,7 +634,7 @@ We initially had two independent goals with this project:
 
 The first case is called \lstinline{Plan_Z} in the source files, and it uses the number of minimal paths from base to base as objective function, starting from a crosspolytope.
 
-The second case is far more interesting. We add a restriction of preserving the witdh after each flip, but we need an objective function that helps us removing vertices. Note that to remove a vertex we require to have a flip of type $(1,d)$, that is, a vertex whith $\text{card}(f)=1$. 
+The second case is far more interesting. We add a restriction of preserving the witdh after each flip, but we need an objective function that helps us removing vertices. Note that to remove a vertex we require to have a flip of type $(1,d)$, that is, a vertex whith $|f|=1$. 
 Then, the objective function to minimize is the number of vertices, plus a smaller function to push the algorithm in the right direction. Some heuristics we have implemented for the latter are:
 
 \begin{description}
@@ -690,7 +693,7 @@ This is very convenient, as it also makes it very easy to spot vertex-adding fli
 Along the course of the project we have developed several versions of the simulated annealing algorithm.
 
 \begin{enumerate}
-  \item One written in pure C used bitmask techniques with a pool of faces, for fast addressing and modification. This limited the maximum number of facets, making it impossible to use it for high dimension. We did not implement boundary flips, and we used it to try to find non-Hirsch prismatoids starting with a nonHirsch one (in fact a cross-polytope, the dual of a hypercube.
+  \item One written in pure C used bitmask techniques with a pool of faces, for fast addressing and modification. This limited the maximum number of facets, making it impossible to use it for high dimension. We did not implement boundary flips, and we used it to try to find non-Hirsch prismatoids starting with a nonHirsch one (in fact a cross-polytope, the dual of a hypercube).
   
   \item A second one written in C++98, using the open-source project polymake \cite{polymake} as a library. After severe problems with polymake's implementation of the graph data structure, we decided to implement our own simplicial complex structure from scratch.
 
@@ -714,7 +717,7 @@ I will focus on the last one, which can be found at my github \cite{github}. Bas
 The class \lstinline{prismatoid} has some interesting attributes:
 
 \begin{itemize}
-  \item \lstinline{map<mask,mask> SC} represent the set of faces of the simplicial complex as a c++ map. It first argument is the bitmask representing the face, and the second one is the union of all the faces in its star. Using this information, we can iterate through its subsets and supersets, easily traversing the complex in logarithmic time.
+  \item \lstinline{map<mask,mask> SC} represent the set of faces of the simplicial complex as a c++ map. Its first argument is the bitmask representing the face, and the second one is the union of all the faces in its star. Using this information, we can iterate through its subsets and supersets, easily traversing the complex in logarithmic time.
   \item \lstinline{map<mask,il> dists} has, for every facet, its distance to the first base, and the number of shortest paths from the base to that facet.
 
   \item \lstinline{map<mask,int> options} is the set of ustars of ridges. There is a bijection between the set of possible flips and options, as explained previously. The second argument is for reference counting, it represents how many ridges have this ustar. It speeds up the execution of a flip.
@@ -768,7 +771,7 @@ A pure simplicial complex of dimension $d-1$ is \emph{shellable} if there is an 
 Checking shellability is belived to be NP-complete, and general purpose methods (including the one implemented in polymake) failed to do it for this example. But a semiautomatized  method based on first ordering the facets by layers and distance to the initial base, and then iteratively swapping facets that violated the shelling definition with later ones, succeeded. We believe this to be because our initial ordering was sufficiently close to a shelling. It is however interesting to note that no shelling order is compatible with the layers, because the union of the first three layers is not a ball, while every initial segment in a shelling of a sphere is a ball.
 
 \section{Conclusions}
-We have obtained simplified prismatoids preserving a property (non d-step), using a common technique. 5 of them achieve the minimum, 16 vertices. We are interested in finding if these topological prismatoids correspond to a polytope. If one of these prismatoids is polytopal, according to Theorem 1, there is a non-Hirsch polytope in dimension $11$ with $22$ vertices.
+We have obtained simplified prismatoids preserving a property (\emph{non d-step}, that is, its width is greater than $d$), using a common technique. 5 of them achieve the minimum, 16 vertices. We are interested in finding if these topological prismatoids correspond to a polytope. If one of these prismatoids is polytopal, according to Theorem 1, there is a non-Hirsch polytope in dimension $11$ with $22$ vertices.
 
 Thus, an interesting idea for the future is to check if our prismatoids are polytopal. There is some research on the topic, and a necessary condition for polytopability is shellability. It is possible (but not trivial) to check the shellability of our prismatoids using their ``layer'' structure as a guide.
 
@@ -783,13 +786,13 @@ If polytopal, these smaller examples of non d-step prismatoids could shed some l
 H.~L.~Abbott and M.~Katchalski, On the snake in the box problem, \emph{Journal of Combinatorial Theory, Series B} {\bf 44} (1988) 12--24.
 
 \bibitem{nonPolytopal}
-  Altshuler, Amos. "The Mani-Walkup spherical counterexamples to the W v-path conjecture are not polytopal." Mathematics of operations research 10.1 (1985): 158-159.
+  A. Altshuler. "The Mani-Walkup spherical counterexamples to the W v-path conjecture are not polytopal." Mathematics of operations research 10.1 (1985): 158-159.
 
 \bibitem{Lutz}
-  Björner, Anders, and Frank H. Lutz. "Simplicial manifolds, bistellar flips and a 16-vertex triangulation of the Poincaré homology 3-sphere." Experimental Mathematics 9.2 (2000): 275-289.
+  A. Björner, and F. H. Lutz. "Simplicial manifolds, bistellar flips and a 16-vertex triangulation of the Poincaré homology 3-sphere." Experimental Mathematics 9.2 (2000): 275-289.
 
 \bibitem{data structure}
-  Boissonnat, Jean-Daniel, and Sebastien Tavenas. "Building efficient and compact data structures for simplicial complexes." arXiv preprint arXiv:1503.07444 (2015).
+  J.D. Boissonnat, and S. Tavenas. "Building efficient and compact data structures for simplicial complexes." arXiv preprint arXiv:1503.07444 (2015).
 
 \bibitem{mypaper}
   F.~Criado, F.~Santos.
@@ -808,16 +811,16 @@ DMV Sem.~\textbf{29}, Birkh\"auser, 2000, pp.~43--73.
 Software available at \url{http://polymake.org}
 
 \bibitem{optimumSA}
-  Granville, Vincent, Mirko Krivánek, and J-P. Rasson. "Simulated annealing: A proof of convergence." IEEE transactions on pattern analysis and machine intelligence 16.6 (1994): 652-656.
+  V. Granville, K. Mirko, and J-P. Rasson. "Simulated annealing: A proof of convergence." IEEE transactions on pattern analysis and machine intelligence 16.6 (1994): 652-656.
 
 \bibitem{adaptativeSA}
-  Ingber, Lester, et al. "Adaptive simulated annealing." Stochastic global optimization and its applications with fuzzy adaptive simulated annealing. Springer Berlin Heidelberg, 2012. 33-62.
+  L. Ingber, et al. "Adaptive simulated annealing." Stochastic global optimization and its applications with fuzzy adaptive simulated annealing. Springer Berlin Heidelberg, 2012. 33-62.
 
 \bibitem{LutzMimi}
-  Joswig, Michael, Frank H. Lutz, and Mimi Tsuruga. "Sphere recognition: Heuristics and examples." arXiv preprint arXiv:1405.3848 (2014).
+  M. Joswig, F. H. Lutz, and M. Tsuruga. "Sphere recognition: Heuristics and examples." arXiv preprint arXiv:1405.3848 (2014).
 
 \bibitem{examples}
-Gil Kalai, \emph{Combinatorics with a Geometric Flavor}.
+G. Kalai, \emph{Combinatorics with a Geometric Flavor}.
 In ``Visions in Mathematics, GAFA 2000 Special volume, Part II",
 N. Alon, J. Bourgain, A. Connes, M. Gromov, V. Milman eds., 2010, pp. 742--791.
 
@@ -832,15 +835,15 @@ R.~Lidl and G.~Pilz,
  Springer New York, 1997.
 
 \bibitem{ManiWalkup} 
-  Mani, Peter, and David W. Walkup. "A 3-sphere counterexample to the Wv-path conjecture." Mathematics of Operations Research 5.4 (1980): 595-598.
+  P. Mani, and D. W. Walkup. "A 3-sphere counterexample to the Wv-path conjecture." Mathematics of Operations Research 5.4 (1980): 595-598.
 
 \bibitem{improvement}
-Benjamin Matschke, Francisco Santos, Christophe Weibel, The width of 5-dimensional prismatoids
+B. Matschke, F. Santos, C. Weibel, The width of 5-dimensional prismatoids
 arXiv:1202.4701
 Proc. London Math. Soc., Vol 110 (3) (2015), 647-672. DOI: 10.1112/plms/pdu064
 
 \bibitem{Pachner}
-  Pachner, Udo. "PL homeomorphic manifolds are equivalent by elementary shellings." European journal of Combinatorics 12.2 (1991): 129-145.
+  U. Pachner. "PL homeomorphic manifolds are equivalent by elementary shellings." European journal of Combinatorics 12.2 (1991): 129-145.
 
 \bibitem{counterexample}
   F.~Santos.
