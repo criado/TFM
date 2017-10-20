@@ -1,0 +1,157 @@
+5 112
+
+0 1 2 3 a
+4 0 1 5 b
+0 1 5 3 b
+4 0 1 2 d
+4 0 5 2 d
+4 1 5 2 d
+0 5 2 3 d
+6 1 2 7 e
+6 5 2 7 e
+1 5 7 3 e
+1 2 7 3 e
+5 2 7 3 e
+6 1 5 2 h
+6 1 5 7 h
+
+6 1 2 a c
+1 5 2 b c
+0 1 3 b c
+0 5 3 b c
+1 5 3 b c
+4 0 1 a d
+4 0 5 a d
+0 1 2 a d
+6 5 2 a d
+6 5 7 a d
+0 5 3 a d
+0 2 3 a d
+5 2 3 a d
+6 5 2 c d
+6 5 7 c d
+4 0 1 a e
+6 1 2 a e
+6 5 2 a e
+6 5 7 a e
+0 1 3 a e
+0 5 3 a e
+1 2 3 a e
+5 2 3 a e
+0 1 3 c e
+0 5 3 c e
+1 5 3 c e
+4 0 5 a f
+4 0 1 b f
+4 0 5 b f
+4 1 5 b f
+1 5 2 b f
+4 1 5 d f
+1 5 2 d f
+4 0 1 e f
+6 1 2 c h
+6 5 2 c h
+1 5 2 c h
+6 5 7 c h
+6 1 7 e h
+1 5 7 e h
+
+6 7 a c d
+4 1 a c f
+6 2 a c f
+1 2 a c f
+5 2 b c f
+5 7 b c f
+4 1 a d f
+4 5 a d f
+6 2 a d f
+1 2 a d f
+5 7 a d f
+6 2 c d f
+5 2 c d f
+5 7 c d f
+4 0 a e f
+4 1 c e f
+0 1 c e f
+0 5 a c g
+5 7 a c g
+0 1 b c g
+0 5 b c g
+1 2 b c g
+5 7 b c g
+0 5 a f g
+5 7 a f g
+0 1 b f g
+0 5 b f g
+1 2 b f g
+5 7 b f g
+0 1 c f g
+1 2 c f g
+4 1 a c h
+6 1 a c h
+0 5 a c h
+6 7 a c h
+5 7 a c h
+4 1 a e h
+6 1 a e h
+0 5 a e h
+6 7 a e h
+5 7 a e h
+4 1 c e h
+0 5 c e h
+1 5 c e h
+
+7 a b c d
+7 a b d f
+6 a c d f
+7 b c d f
+4 a c e f
+7 a b c g
+7 a b f g
+2 b c f g
+4 a c e h
+0 a e f h
+0 c e f h
+0 a c g h
+0 a f g h
+0 c f g h
+
+base 1:
+2 3 0 1
+4 0 1 5
+3 0 1 5
+2 4 0 1
+2 4 0 5
+2 4 1 5
+2 3 0 5
+2 7 6 1
+2 7 6 5
+7 3 1 5
+2 7 3 1
+2 7 3 5
+2 6 1 5
+7 6 1 5
+
+one point suspension:  1 2
+one point suspension:  1 5
+one point suspension:  5 2
+
+base 2:
+a b c d
+a f b d
+a f c d
+f b c d
+a f c e
+a b g c
+a f b g
+f b g c
+a h c e
+a f h e
+f h c e
+a g h c
+a f g h
+f g h c
+
+one point suspension:  a c
+one point suspension:  a f
+one point suspension:  c f

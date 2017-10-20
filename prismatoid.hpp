@@ -1,16 +1,16 @@
-#ifndef PRISMATOID     
+#ifndef PRISMATOID
 #define PRISMATOID     // Decaf ninja style. Bit ninjustu but with class.
                        // My humble interpretation of what SimplicialComplex.hpp
 #include <map>         // should be.
 #include <vector>      //
-#include <algorithm>   // Author: Francisco "Paco" Criado 
-#include <iostream>    // 
-#include <fstream>     // I think my coding style is evolving into something 
+#include <algorithm>   // Author: Francisco "Paco" Criado
+#include <iostream>    //
+#include <fstream>     // I think my coding style is evolving into something
 #include <iomanip>     // more readable after this.
 #include <queue>       // Brief reminder: A simplex has dim vertices.
-#include <ctime>                                                           
+#include <ctime>
 #include <chrono>
-#include <random>     
+#include <random>
 #include <cstdlib>
 #include <set>
 #include <string>
@@ -47,7 +47,7 @@ class prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Public stuff (that should be private)
   //////////////////////////////////////////////////////////////////////////////
-  
+
   mask base1, base2;               // The actual vertices in each base.
   int dim;                         // A facet has dim vertices
   int numFacets;                   // Number of facets.
@@ -65,7 +65,7 @@ class prismatoid { public:
   //////////////////////////////////////////////////////////////////////////////
   // Public methods
   //////////////////////////////////////////////////////////////////////////////
-  
+
   // S1: Constructors and IO
   prismatoid(int _dim);            // Crosspolytope
   prismatoid(istream& input);      // Reads prismatoid from file
@@ -90,7 +90,7 @@ class prismatoid { public:
 
   void cascadeFacets();            // Completes the construction from the facets
 
-  void initOptions();              // Inits the options list 
+  void initOptions();              // Inits the options list
   void initGraph();                // Inits graph and dists
   void updateDists(queue<mask>& q);// Updates dists by cascading
 

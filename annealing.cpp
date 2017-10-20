@@ -8,12 +8,11 @@ double schedule(int k) {
   // "a ojo"-selected annealing schedule
   double t0=1000.0;
   return t0*pow(0.99997, k);
-  /*
-  return 1e-10;
 
-  double t0=500.0;
-  return t0/log(k+2);
-  /**/
+  //return 1e-10;
+
+  //double t0=500.0;
+  //return t0/log(k+2);
 }
 
 int main() {
@@ -42,13 +41,13 @@ int main() {
 
       numPrisms++; avgCost+=oldCost; bestCost=min(bestCost,oldCost);
       if(((k-1)%1000)==0) {
-        
+
         cout<<"Experiment "<<experiment
             <<" ("<<setw(4)<<100*double(k-1)/maxk<<"%): "
             <<setw(5)<<" temp= "<<t<<": "
             << oldCost <<" "<<avgCost/numPrisms<<" "<<bestCost
-            <<" flip time: "<<totaltime/totalflips/1000.0<<"us."<<endl;
-        cout<<"  vertices:" <<countBits(p.base1|p.base2)
+            <<" flip time: "<<totaltime/totalflips/1000.0<<"us."<<endl
+            <<"  vertices:" <<countBits(p.base1|p.base2)
             <<" diameter:"<<p.distBase2.first<<endl;
         totaltime=0.0; totalflips=0;
         numPrisms=0.0; bestCost=1e30; avgCost=0.0;

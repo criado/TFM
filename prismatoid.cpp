@@ -43,7 +43,7 @@ prismatoid::prismatoid(istream& input) {
   SC=map<mask,mask>();
 
   input>>dim>>numFacets;
-  
+
   for(int i=0; i<numFacets; i++) { //readFacet?
     mask f=0, aux; for(int j=0; j<dim; j++) input>>aux, f|=(1<<aux);
     SC[f]=f;
@@ -56,7 +56,7 @@ void prismatoid::write(ostream& output) {
   output<<dim<<" "<<numFacets<<endl;
   for(auto& it: SC) if(countBits(it.first)==dim) {
     for(int i=0; i<2*N; ++i) if((it.first&(1<<i))!=0) output<<i<<" ";
-    
+
     output<<endl;
   }
 }
@@ -74,7 +74,7 @@ void prismatoid::initOptions() {
 // Finds a move or crashes tryin'.
 flip prismatoid::findFlip(rng& gen) {
   flip fl;
-  
+
   uniform_int_distribution<int> dis(0, options.size()-1);
   auto origin = options.begin(); advance(origin, dis(gen));
 
@@ -122,9 +122,9 @@ void prismatoid::execFlip(flip fl) {
         if(in(x,base2)) adyBase2.insert(x);
         ++options[SC[x]];
     } }
-    
+
     // Stuff that remain the same.
-    else { 
+    else {
       if(countBits(x)==dim-1) if(--options[SC[x]]==0) options.erase(SC[x]);
       SC[x]&=~u; SC[x]|= ((countBits(f&~x)==1)? ((f&x)|l|v): u);
       if(countBits(x)==dim-1) ++options[SC[x]];
@@ -147,7 +147,7 @@ void prismatoid::execFlip(flip fl) {
 }
 
 // Makes a random move. Returns its (f,l,v).
-flip prismatoid::execFlip(rng& gen) { 
+flip prismatoid::execFlip(rng& gen) {
   flip fl=findFlip(gen); execFlip(fl); return fl;
 }
 
@@ -168,16 +168,16 @@ bool prismatoid::checkFlip(mask u, flip& fl) {
     if     (countBits(u&LAYER2)==1) newv= firstElement(LAYER1 &~base1);
     else if(countBits(u&LAYER1)==1) newv= firstElement(LAYER2 &~base2);
     else cerr<<"Error 841: Not enough cheese in buffer."<<endl;
-    
+
     if(newv==0) return false; u|=newv;
   }
 
   f=u;
   for(mask x=firstElement(u); x!=0; nextElement(u,x))
     if(SC.find(u^x)!=SC.end()) f&=u^x;
-  l=u^f; 
+  l=u^f;
 
-  if      (countBits(u&base1)==1) v=(u&base1), f^=v; 
+  if      (countBits(u&base1)==1) v=(u&base1), f^=v;
   else if (countBits(u&base2)==1) v=(u&base2), f^=v;
   else v=0;
 
@@ -246,7 +246,7 @@ void prismatoid::updateDists(queue<mask>& q) {
         for(mask x=firstElement(f); x!=0; nextElement(f,x))
           if(SC.find(f^x)!=SC.end())
             if(countBits(f2=SC[f^x]^x)==dim) q.push(f2);
-  } } } 
+  } } }
 
   il aux(200,0);
   for(auto &it: adyBase2) relaxPair(aux, dists[SC[it]]);
@@ -270,7 +270,7 @@ double prismatoid::cost() {
   #ifdef PLAN_C
   mask vertices=base1|base2;
   vector<double> ustars;
-  
+
   for(mask x=firstElement(vertices); x!=0; nextElement(vertices,x))
     ustars.push_back((double)countBits(SC[x]));
   sort(ustars.begin(),ustars.end());
@@ -320,7 +320,7 @@ bool prismatoid::everythingIsOK() {
   //*
   for(auto& it: SC)
     for(mask x=firstElement(it.first); x!=0; nextElement(it.first,x))
-      if(SC.find(it.first&~x)==SC.end()||!in(it.second,SC[it.first&~x])) { 
+      if(SC.find(it.first&~x)==SC.end()||!in(it.second,SC[it.first&~x])) {
         cout<<"I find your lack of queso annoying"<<endl;
         cout<<"face and ustar"<<endl;
         printMask(it.first);
@@ -334,7 +334,7 @@ bool prismatoid::everythingIsOK() {
 
   // 1.5: Pure simplicial complex
   //*
-  for(auto &it: SC) 
+  for(auto &it: SC)
     if(it.first==it.second && countBits(it.first)!=dim) {
       cout<<"sssh, no tears. Only "<<numflips<<" dreams now"<<endl;
       return false;
