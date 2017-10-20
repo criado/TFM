@@ -22,7 +22,7 @@ int main() {
   auto dice=bind(dist,generator);
   double totaltime=0.0; int totalflips=0;
 
-  flip fl; double record=28;
+  flip fl;
 
   for(int experiment=1; experiment>=1; experiment++) {
     int maxk=100000;
@@ -34,6 +34,7 @@ int main() {
       //prismatoid p(9);
       ifstream file("./outputs1/sol83"); prismatoid p(file,generator); file.close();
     #endif
+    cout<<p.cost()<< endl;
 
     for(int k=0; k<maxk; k++) {
       oldCost=p.cost();
