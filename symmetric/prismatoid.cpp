@@ -196,13 +196,15 @@ bool prismatoid::checkFlip(mask u, flip& fl) {
   if      (countBits(u&base1)==1) v=(u&base1), f^=v;
   else if (countBits(u&base2)==1) v=(u&base2), f^=v;
   else v=0;
-  if (v!=0) return false;
+
+  // Forbid frontier flips?
+  //if (v!=0) return false;
 
   // Interior flips should not add new frontier faces.
   if(v==0 && (in(l,base1) || in(l,base2))) return false;
 
   // Am I adding/removing a vertex?
-  // if(!changeBases && (countBits(l)==1 || countBits(f)==1)) return false;
+  if(!changeBases && (countBits(l)==1 || countBits(f)==1)) return false;
 
   // Correct size of the support
   if(v==0 && countBits(SC[f])!=dim+1) return false;
@@ -287,7 +289,8 @@ int prismatoid::computeAsymmetries() {
 
 // Number of non-symmetric simplices
 double prismatoid::cost() {
-  return double(asymmetries);
+  return 1.0;
+  //return double(asymmetries);
 }
 bool prismatoid::feasible() {
   #ifndef PLAN_Z
