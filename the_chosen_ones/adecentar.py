@@ -1,15 +1,15 @@
-threshold = 14
-base1= {}; base2= {}
+threshold = 7
+base1= {}; base2={}
 psc= []
 
 line= input()
 d,n= [int(x) for x in line.split(" ")]
 for i in range(n):
     line=input()
-    psc.append([int(x) for x in line.split(" ")])
+    psc.append([int(x) for x in line.split(" ")[:-1]])
     for v in psc[-1]:
-        if v< 14 and v not in base1: base1[v]= chr(ord('0')+len(base1))
-        elif v>=14 and v not in base2: base2[v]= chr(ord('a')+len(base2))
+        if v< 7 and v not in base1: base1[v]= chr(ord('0')+len(base1))
+        elif v>=7 and v not in base2: base2[v]= chr(ord('a')+len(base2))
 
 bases= {**base1, **base2}
 
